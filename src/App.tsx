@@ -886,16 +886,53 @@ const CtaBanner: FC<CtaBannerProps> = ({ logoPrimarySrc }) => {
 };
 
 // ─── Contact ──────────────────────────────────────────────────
+// ─── Contact ──────────────────────────────────────────────────
+const EMAILJS_SERVICE_ID  = "service_47x2vlk";
+const EMAILJS_TEMPLATE_ID = "template_4fgtfgj";
+const EMAILJS_PUBLIC_KEY  = "LbUJ2NNvj98WobDek";
+
 const Contact: FC = () => {
   const [form, setForm] = useState({
     name: "", email: "", phone: "", type: "", date: "", guests: "", message: "",
   });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleSubmit = () => alert("¡Mensaje enviado! Te contactaremos en menos de 24hs.");
+  const handleSubmit = async () => {
+    if (!form.name || !form.email || !form.message) {
+      alert("Por favor completá al menos tu nombre, email y mensaje.");
+      return;
+    }
+    setStatus("loading");
+    try {
+      const res = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service_id:  EMAILJS_SERVICE_ID,
+          template_id: EMAILJS_TEMPLATE_ID,
+          user_id:     EMAILJS_PUBLIC_KEY,
+          template_params: {
+            name:    form.name,
+            email:   form.email,
+            phone:   form.phone,
+            type:    form.type,
+            date:    form.date,
+            guests:  form.guests,
+            message: form.message,
+          },
+        }),
+      });
+      if (!res.ok) throw new Error("Error al enviar");
+      setStatus("success");
+      setForm({ name: "", email: "", phone: "", type: "", date: "", guests: "", message: "" });
+    } catch {
+      setStatus("error");
+    }
+  };
 
   const inputStyle: React.CSSProperties = {
     background: "#1a1a26",
@@ -942,7 +979,6 @@ const Contact: FC = () => {
           ))}
         </FadeIn>
 
-        {/* Form */}
         <FadeIn delay={0.15} className="flex flex-col gap-5">
           <div>
             <Label>Nombre completo</Label>
@@ -994,8 +1030,19 @@ const Contact: FC = () => {
           </div>
 
           <PrimaryBtn onClick={handleSubmit} fullWidth>
-            Enviar consulta
+            {status === "loading" ? "Enviando..." : "Enviar consulta"}
           </PrimaryBtn>
+
+          {status === "success" && (
+            <p className="text-sm text-center mt-2" style={{ color: "#c9a84c", letterSpacing: "0.05em" }}>
+              ✦ ¡Mensaje enviado! Te contactamos en menos de 24hs.
+            </p>
+          )}
+          {status === "error" && (
+            <p className="text-sm text-center mt-2" style={{ color: "#e07070", letterSpacing: "0.05em" }}>
+              Hubo un error al enviar. Intentá de nuevo o escribinos por WhatsApp.
+            </p>
+          )}
         </FadeIn>
       </div>
     </section>

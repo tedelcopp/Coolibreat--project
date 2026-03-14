@@ -1,6 +1,6 @@
-# Coolibreat – Landing Page
+# Coolibreat | Eventos & Experiencia | Landing Page
 
-## 🚀 Cómo correr el proyecto
+## 🚀 | Cómo correr el proyecto
 
 ### Requisitos previos
 

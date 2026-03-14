@@ -234,7 +234,7 @@ interface NavProps {
   logoSecondarySrc: string;
 }
 
-const Nav: FC<NavProps> = ({ logoPrimarySrc, logoSecondarySrc }) => {
+const Nav: FC<NavProps> = ({ logoPrimarySrc }) => {
   const scrolled = useScrolled();
   const [open, setOpen] = useState(false);
 
@@ -271,11 +271,7 @@ const Nav: FC<NavProps> = ({ logoPrimarySrc, logoSecondarySrc }) => {
               alt="Coolibreat"
               className="absolute inset-0 h-full w-full object-contain"
             />
-            <img
-              src={logoSecondarySrc}
-              alt="Coolibreat"
-              className="absolute inset-0 h-full w-full object-contain opacity-70 translate-x-1 translate-y-1"
-            />
+        
           </div>
           <span
             className="font-light tracking-[0.2em] uppercase"
@@ -368,7 +364,7 @@ interface HeroProps {
   logoSecondarySrc: string;
 }
 
-const Hero: FC<HeroProps> = ({ logoPrimarySrc, logoSecondarySrc }) => {
+const Hero: FC<HeroProps> = ({ logoPrimarySrc }) => {
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
@@ -395,14 +391,6 @@ const Hero: FC<HeroProps> = ({ logoPrimarySrc, logoSecondarySrc }) => {
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         style={{ width: "min(500px,75vw)", opacity: 0.06, filter: "grayscale(1)", animation: "floatBird 8s ease-in-out infinite" }}
       />
-      <img
-        src={logoSecondarySrc}
-        alt=""
-        aria-hidden
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-        style={{ width: "min(460px,70vw)", opacity: 0.05, filter: "grayscale(1)", animation: "floatBird 9s ease-in-out infinite" }}
-      />
-
       <p
         className="relative z-10 text-[11px] tracking-[0.44em] uppercase font-normal mb-7"
         style={{ color: "#c9a84c", opacity: 0, animation: "fadeUp 1s ease 0.3s forwards" }}
@@ -448,13 +436,6 @@ const Hero: FC<HeroProps> = ({ logoPrimarySrc, logoSecondarySrc }) => {
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         style={{ opacity: 0, animation: "fadeUp 1s ease 1.4s forwards" }}
       >
-        <div
-          className="w-px h-12"
-          style={{ background: "linear-gradient(to bottom,#c9a84c,transparent)", animation: "scrollPulse 2.5s ease infinite" }}
-        />
-        <span className="text-[10px] tracking-[0.3em] uppercase" style={{ color: "rgba(245,240,232,0.3)" }}>
-          scroll
-        </span>
       </div>
     </section>
   );
@@ -499,7 +480,7 @@ interface AboutProps {
   logoSecondarySrc: string;
 }
 
-const About: FC<AboutProps> = ({ logoPrimarySrc, logoSecondarySrc }) => (
+const About: FC<AboutProps> = ({ logoPrimarySrc }) => (
   <section id="nosotros" className="py-28 px-8 md:px-16">
     <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center">
       {/* Visual */}
@@ -520,17 +501,10 @@ const About: FC<AboutProps> = ({ logoPrimarySrc, logoSecondarySrc }) => (
                 className="absolute inset-0 w-full h-full object-contain"
                 style={{ opacity: 0.9 }}
               />
-              <img
-                src={logoSecondarySrc}
-                alt="Coolibreat"
-                className="absolute inset-0 w-full h-full object-contain"
-                style={{ opacity: 0.55, transform: "translate(6px, 6px)" }}
-              />
             </div>
           </div>
         </div>
       </FadeIn>
-      {/* Text */}
       <FadeIn delay={0.15}>
         <SectionLabel text="Quiénes somos" />
         <SectionTitle>
@@ -538,7 +512,7 @@ const About: FC<AboutProps> = ({ logoPrimarySrc, logoSecondarySrc }) => (
           <em style={{ fontStyle: "italic", color: "#e8c97a" }}>diferente</em>
         </SectionTitle>
         <p className="mt-7 text-sm leading-loose" style={{ color: "rgba(245,240,232,0.55)" }}>
-          En Coolibre creemos que cada evento es una oportunidad para crear algo extraordinario.
+          En Coolibreat creemos que cada evento es una oportunidad para crear algo extraordinario.
           Combinamos el arte, la música electrónica y la hospitalidad para diseñar experiencias que
           quedan en la memoria de quienes las viven.
         </p>
@@ -546,7 +520,6 @@ const About: FC<AboutProps> = ({ logoPrimarySrc, logoSecondarySrc }) => (
           Desde eventos sociales íntimos hasta grandes producciones corporativas, nuestro equipo
           cuida cada detalle para que el resultado supere siempre las expectativas.
         </p>
-        {/* Stats */}
         <div
           className="mt-10 pt-8 grid grid-cols-3 gap-4"
           style={{ borderTop: "1px solid rgba(201,168,76,0.22)" }}
@@ -873,7 +846,7 @@ interface CtaBannerProps {
   logoSecondarySrc: string;
 }
 
-const CtaBanner: FC<CtaBannerProps> = ({ logoPrimarySrc, logoSecondarySrc }) => {
+const CtaBanner: FC<CtaBannerProps> = ({ logoPrimarySrc }) => {
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   return (
     <div
@@ -895,7 +868,7 @@ const CtaBanner: FC<CtaBannerProps> = ({ logoPrimarySrc, logoSecondarySrc }) => 
         style={{ width: 600, opacity: 0.05, filter: "grayscale(1)" }}
       />
       <img
-        src={logoSecondarySrc}
+        src={logoPrimarySrc}
         alt=""
         aria-hidden
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
@@ -969,8 +942,8 @@ const Contact: FC = () => {
 
           {[
             { label: "Instagram", content: <a href="https://instagram.com/coolibreat" target="_blank" rel="noreferrer" className="transition-colors duration-300" style={{ color: "rgba(245,240,232,0.5)" }} onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")} onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}>@coolibreat</a> },
-            { label: "Email", content: <a href="mailto:hola@coolibre.com" className="transition-colors duration-300" style={{ color: "rgba(245,240,232,0.5)" }} onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")} onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}>hola@coolibreat.com</a> },
-            { label: "Zona de cobertura", content: <span style={{ color: "rgba(245,240,232,0.5)" }}>Buenos Aires y alrededores</span> },
+            { label: "Email", content: <a href="mailto:hola@coolibreat.com" className="transition-colors duration-300" style={{ color: "rgba(245,240,232,0.5)" }} onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")} onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}>hola@coolibreat.com</a> },
+            { label: "Zona de cobertura", content: <span style={{ color: "rgba(245,240,232,0.5)" }}>Chubut - Patagonia Argentina</span> },
             { label: "WhatsApp", content: <a href="https://wa.me/5491100000000" target="_blank" rel="noreferrer" className="transition-colors duration-300" style={{ color: "rgba(245,240,232,0.5)" }} onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")} onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}>Escribinos por WhatsApp</a> },
           ].map((item) => (
             <div key={item.label} className="py-5 text-sm" style={{ borderBottom: "1px solid rgba(201,168,76,0.18)" }}>
@@ -1048,7 +1021,7 @@ interface FooterProps {
   logoSecondarySrc: string;
 }
 
-const Footer: FC<FooterProps> = ({ logoPrimarySrc, logoSecondarySrc }) => {
+const Footer: FC<FooterProps> = ({ logoPrimarySrc }) => {
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   const links = [
     { label: "Servicios", id: "servicios" },
@@ -1066,11 +1039,6 @@ const Footer: FC<FooterProps> = ({ logoPrimarySrc, logoSecondarySrc }) => {
               src={logoPrimarySrc}
               alt="Coolibreat"
               className="absolute inset-0 h-full w-full object-contain opacity-70"
-            />
-            <img
-              src={logoSecondarySrc}
-              alt="Coolibreat"
-              className="absolute inset-0 h-full w-full object-contain opacity-50 translate-x-0.5 translate-y-0.5"
             />
           </div>
           <span className="font-light tracking-[0.2em] uppercase" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.05rem", color: "rgba(245,240,232,0.55)" }}>

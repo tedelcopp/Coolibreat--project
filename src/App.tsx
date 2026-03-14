@@ -786,7 +786,7 @@ const Testimonials: FC = () => (
           <em style={{ fontStyle: "italic", color: "#e8c97a" }}>nos inspiran</em>
         </SectionTitle>
       </FadeIn>
-      <div className="grid md:grid-cols-3 gap-5">
+      <div className="grid md:grid-cols-3 gap-5 items-stretch">
         {TESTIMONIALS.map((t, i) => (
           <FadeIn key={t.author} delay={i * 0.1}>
             <TestimonialCard item={t} />
@@ -805,7 +805,7 @@ const TestimonialCard: FC<TestimonialCardProps> = ({ item }) => {
   const [hovered, setHovered] = useState(false);
   return (
     <div
-      className="relative p-10 transition-colors duration-300"
+      className="relative p-10 transition-colors duration-300 h-full"
       style={{
         border: `1px solid ${hovered ? "#c9a84c" : "rgba(201,168,76,0.22)"}`,
         background: "#1a1a26",
@@ -885,7 +885,6 @@ const CtaBanner: FC<CtaBannerProps> = ({ logoPrimarySrc }) => {
   );
 };
 
-// ─── Contact ──────────────────────────────────────────────────
 // ─── Contact ──────────────────────────────────────────────────
 const EMAILJS_SERVICE_ID  = "service_47x2vlk";
 const EMAILJS_TEMPLATE_ID = "template_4fgtfgj";

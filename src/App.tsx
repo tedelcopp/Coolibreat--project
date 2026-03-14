@@ -88,7 +88,7 @@ const TESTIMONIALS: TestimonialItem[] = [
     quote:
       "Contratamos a Coolibreat para el lanzamiento de nuestra línea premium y superaron todas nuestras expectativas. La barra móvil fue el hit de la noche.",
     author: "Valentina M.",
-    role: "Directora de Marketing · Empresa de moda",
+    role: "Evento privado · Esquel, Chubut - Patagonia Argentina.",
   },
   {
     quote:
@@ -100,7 +100,7 @@ const TESTIMONIALS: TestimonialItem[] = [
     quote:
       "Profesionales, creativos y muy atentos a los detalles. El DJ set fue increíble y los tragos artesanales hicieron que todos se quedaran hasta el final.",
     author: "Martín G.",
-    role: "Evento Privado · Esquel, Chubut",
+    role: "Evento privado · Esquel, Chubut - Patagonia Argentina.",
   },
 ];
 

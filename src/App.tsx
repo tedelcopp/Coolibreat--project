@@ -483,7 +483,6 @@ interface AboutProps {
 const About: FC<AboutProps> = ({ logoPrimarySrc }) => (
   <section id="nosotros" className="py-28 px-8 md:px-16">
     <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center">
-      {/* Visual */}
       <FadeIn className="flex justify-center order-first">
         <div className="relative flex items-center justify-center" style={{ width: "min(360px,42vw)", height: "min(360px,42vw)" }}>
           <div
@@ -593,7 +592,6 @@ const ServiceCard: FC<ServiceCardProps> = ({ service, onCta }) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Top accent line */}
       <div
         className="absolute top-0 left-0 right-0 h-px origin-left transition-transform duration-400"
         style={{
@@ -601,8 +599,6 @@ const ServiceCard: FC<ServiceCardProps> = ({ service, onCta }) => {
           transform: hovered ? "scaleX(1)" : "scaleX(0)",
         }}
       />
-
-      {/* Icon */}
       <div
         className="w-12 h-12 rounded-full flex items-center justify-center mb-7 text-lg transition-all duration-300"
         style={{
@@ -744,7 +740,6 @@ const Process: FC = () => (
       </FadeIn>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 relative">
-        {/* Connector line (desktop) */}
         <div
           className="absolute top-6 left-[12%] right-[12%] h-px hidden lg:block"
           style={{ background: "rgba(201,168,76,0.2)" }}
@@ -867,13 +862,6 @@ const CtaBanner: FC<CtaBannerProps> = ({ logoPrimarySrc }) => {
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         style={{ width: 600, opacity: 0.05, filter: "grayscale(1)" }}
       />
-      <img
-        src={logoPrimarySrc}
-        alt=""
-        aria-hidden
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-        style={{ width: 520, opacity: 0.045, filter: "grayscale(1)" }}
-      />
       <FadeIn className="relative z-10">
         <h2
           className="font-light leading-[1.1] mb-6"
@@ -930,7 +918,6 @@ const Contact: FC = () => {
   return (
     <section id="contacto" className="py-28 px-8 md:px-16">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-start">
-        {/* Left */}
         <FadeIn>
           <SectionLabel text="Contacto" />
           <SectionTitle>

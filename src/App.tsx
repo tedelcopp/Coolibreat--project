@@ -200,9 +200,8 @@ interface SectionLabelProps {
 
 const SectionLabel: FC<SectionLabelProps> = ({ text, centered }) => (
   <div
-    className={`flex items-center gap-4 text-[11px] tracking-[0.42em] uppercase font-normal mb-6 ${
-      centered ? "justify-center" : ""
-    }`}
+    className={`flex items-center gap-4 text-[11px] tracking-[0.42em] uppercase font-normal mb-6 ${centered ? "justify-center" : ""
+      }`}
     style={{ color: "#c9a84c" }}
   >
     {!centered && <span className="block w-8 h-px" style={{ background: "#c9a84c" }} />}
@@ -247,6 +246,7 @@ const Nav: FC<NavProps> = ({ logoPrimarySrc }) => {
     { label: "Servicios", id: "servicios" },
     { label: "Nosotros", id: "nosotros" },
     { label: "Proceso", id: "proceso" },
+    { label: "Galería", id: "galeria" },
     { label: "Contacto", id: "contacto" },
   ];
 
@@ -271,7 +271,7 @@ const Nav: FC<NavProps> = ({ logoPrimarySrc }) => {
               alt="Coolibreat"
               className="absolute inset-0 h-full w-full object-contain"
             />
-        
+
           </div>
           <span
             className="font-light tracking-[0.2em] uppercase"
@@ -775,6 +775,57 @@ const Process: FC = () => (
   </section>
 );
 
+// ─── Gallery ──────────────────────────────────────────────────
+const GALLERY_IMAGES = [
+  "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&q=80&w=800"
+];
+
+const Gallery: FC = () => (
+  <section id="galeria" className="py-28 px-8 md:px-16" style={{ background: "#0d0d0f" }}>
+    <div className="max-w-6xl mx-auto">
+      <FadeIn className="text-center mb-16">
+        <SectionLabel text="Portfolio" centered />
+        <SectionTitle>
+          Nuestros<br />
+          <em style={{ fontStyle: "italic", color: "#e8c97a" }}>momentos</em>
+        </SectionTitle>
+        <p className="mt-5 text-sm leading-loose max-w-xl mx-auto" style={{ color: "rgba(245,240,232,0.5)" }}>
+          Un recorrido visual por algunos de los eventos que hemos diseñado y producido.
+        </p>
+      </FadeIn>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {GALLERY_IMAGES.map((src, i) => (
+          <FadeIn key={i} delay={i * 0.1}>
+            <div
+              className="relative overflow-hidden group aspect-[4/5] sm:aspect-square lg:aspect-[4/5] w-full"
+              style={{ background: "#1a1a26", border: "1px solid rgba(201,168,76,0.18)" }}
+            >
+              <img
+                src={src}
+                alt={`Evento de Coolibreat ${i + 1}`}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                style={{ opacity: 0.85 }}
+              />
+              <div
+                className="absolute inset-0 transition-opacity duration-500 opacity-0 group-hover:opacity-100"
+                style={{ background: "linear-gradient(to top, rgba(13,13,15,0.9) 0%, transparent 50%)" }}
+              />
+            </div>
+          </FadeIn>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
 // ─── Testimonials ─────────────────────────────────────────────
 const Testimonials: FC = () => (
   <section className="py-28 px-8 md:px-16">
@@ -886,9 +937,9 @@ const CtaBanner: FC<CtaBannerProps> = ({ logoPrimarySrc }) => {
 };
 
 // ─── Contact ──────────────────────────────────────────────────
-const EMAILJS_SERVICE_ID  = "service_47x2vlk";
+const EMAILJS_SERVICE_ID = "service_47x2vlk";
 const EMAILJS_TEMPLATE_ID = "template_4fgtfgj";
-const EMAILJS_PUBLIC_KEY  = "LbUJ2NNvj98WobDek";
+const EMAILJS_PUBLIC_KEY = "LbUJ2NNvj98WobDek";
 
 const Contact: FC = () => {
   const [form, setForm] = useState({
@@ -911,16 +962,16 @@ const Contact: FC = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          service_id:  EMAILJS_SERVICE_ID,
+          service_id: EMAILJS_SERVICE_ID,
           template_id: EMAILJS_TEMPLATE_ID,
-          user_id:     EMAILJS_PUBLIC_KEY,
+          user_id: EMAILJS_PUBLIC_KEY,
           template_params: {
-            name:    form.name,
-            email:   form.email,
-            phone:   form.phone,
-            type:    form.type,
-            date:    form.date,
-            guests:  form.guests,
+            name: form.name,
+            email: form.email,
+            phone: form.phone,
+            type: form.type,
+            date: form.date,
+            guests: form.guests,
             message: form.message,
           },
         }),
@@ -1060,26 +1111,32 @@ const Footer: FC<FooterProps> = ({ logoPrimarySrc }) => {
     { label: "Servicios", id: "servicios" },
     { label: "Nosotros", id: "nosotros" },
     { label: "Proceso", id: "proceso" },
+    { label: "Galería", id: "galeria" },
     { label: "Contacto", id: "contacto" },
   ];
 
   return (
     <footer className="py-10 px-8 md:px-16" style={{ background: "#13131a", borderTop: "1px solid rgba(201,168,76,0.18)" }}>
-      <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-6">
-        <button onClick={() => scrollTo("inicio")} className="flex items-center gap-3">
-          <div className="relative h-8 w-8">
-            <img
-              src={logoPrimarySrc}
-              alt="Coolibreat"
-              className="absolute inset-0 h-full w-full object-contain opacity-70"
-            />
-          </div>
-          <span className="font-light tracking-[0.2em] uppercase" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.05rem", color: "rgba(245,240,232,0.55)" }}>
-            Coolibreat
-          </span>
-        </button>
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-8 text-center md:text-left">
+        <div className="flex flex-col items-center md:items-start gap-2 justify-self-center md:justify-self-start">
+          <button onClick={() => scrollTo("inicio")} className="flex items-center gap-3 w-max">
+            <div className="relative h-8 w-8">
+              <img
+                src={logoPrimarySrc}
+                alt="Coolibreat"
+                className="absolute inset-0 h-full w-full object-contain opacity-70"
+              />
+            </div>
+            <span className="font-light tracking-[0.2em] uppercase" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.05rem", color: "rgba(245,240,232,0.55)" }}>
+              Coolibreat
+            </span>
+          </button>
+          <p className="text-[11px] tracking-wide" style={{ color: "rgba(245,240,232,0.22)" }}>
+            © 2025 Coolibreat. Todos los derechos reservados.
+          </p>
+        </div>
 
-        <ul className="flex flex-wrap gap-8 list-none">
+        <ul className="flex flex-wrap justify-center gap-6 md:gap-8 list-none justify-self-center">
           {links.map((l) => (
             <li key={l.id}>
               <button
@@ -1095,28 +1152,37 @@ const Footer: FC<FooterProps> = ({ logoPrimarySrc }) => {
           ))}
         </ul>
 
-        <a
-          href="https://instagram.com/coolibreat"
-          target="_blank"
-          rel="noreferrer"
-          className="flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase transition-colors duration-300"
-          style={{ color: "rgba(245,240,232,0.45)" }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")}
-          onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.45)")}
-        >
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <rect x="2" y="2" width="20" height="20" rx="5" />
-            <circle cx="12" cy="12" r="4" />
-            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-          </svg>
-          @coolibreat
-        </a>
-
-        <p className="text-[11px] tracking-wide w-full md:w-auto text-center md:text-left" style={{ color: "rgba(245,240,232,0.22)" }}>
-          © 2025 Coolibreat. Todos los derechos reservados.
-        </p>
+        {/* Separador vacío para equilibrar la grilla de 3 columnas y garantizar el centrado exacto */}
+        <div className="hidden md:block"></div>
       </div>
     </footer>
+  );
+};
+
+// ─── Floating WhatsApp ─────────────────────────────────────────
+const FloatingWhatsApp: FC = () => {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <a
+      href="https://wa.me/5491100000000"
+      target="_blank"
+      rel="noreferrer"
+      className="fixed bottom-6 right-6 z-[999] flex items-center justify-center rounded-full transition-all duration-300"
+      style={{
+        width: "60px",
+        height: "60px",
+        background: hovered ? "#20b15a" : "#25d366",
+        boxShadow: "0 4px 14px rgba(0,0,0,0.3)",
+        transform: hovered ? "scale(1.05)" : "scale(1)",
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      aria-label="Contactanos por WhatsApp"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="#ffffff" viewBox="0 0 16 16">
+        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" />
+      </svg>
+    </a>
   );
 };
 
@@ -1153,10 +1219,12 @@ export default function App() {
         <ExperienceStrip />
         <Ambiance />
         <Process />
+        <Gallery />
         <Testimonials />
         <CtaBanner logoPrimarySrc={LOGO_PRIMARY_SRC} logoSecondarySrc={LOGO_SECONDARY_SRC} />
         <Contact />
       </main>
+      <FloatingWhatsApp />
       <Footer logoPrimarySrc={LOGO_PRIMARY_SRC} logoSecondarySrc={LOGO_SECONDARY_SRC} />
     </>
   );

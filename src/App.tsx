@@ -11,6 +11,10 @@ interface ServiceItem {
   name: string;
   description: string;
   cta: string;
+  popupInfo?: {
+    image: string;
+    desc: string;
+  };
 }
 
 interface TestimonialItem {
@@ -26,7 +30,7 @@ interface ProcessStep {
 }
 
 interface AmbCard {
-  emoji: string;
+  image: string;
   tag: string;
   title: string;
   span: string;
@@ -44,14 +48,22 @@ const SERVICES: ServiceItem[] = [
     name: "Eventos Sociales",
     description:
       "Cumpleaños, casamientos, aniversarios y celebraciones especiales. Creamos atmósferas únicas que hacen que cada momento sea memorable para vos y tus invitados.",
-    cta: "Consultar disponibilidad",
+    cta: "Ver detalles",
+    popupInfo: {
+      image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
+      desc: "Transformamos tus momentos más importantes en recuerdos imborrables. Nos encargamos de la selección musical, iluminación decorativa, gastronomía y cada aspecto creativo. Nuestro objetivo es que vos solo te dediques a disfrutar mientras nosotros creamos magia."
+    }
   },
   {
     icon: "◈",
     name: "Eventos Corporativos",
     description:
       "Lanzamientos de producto, galas empresariales, teambuildings y cócteles de networking. Proyectamos la imagen de tu empresa con clase y profesionalismo.",
-    cta: "Armar propuesta",
+    cta: "Ver detalles",
+    popupInfo: {
+      image: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=800",
+      desc: "Diseñamos eventos que reflejan fielmente la identidad de tu marca. Con un enfoque en la excelencia corporativa, ofrecemos desde la producción de lanzamientos de gran impacto visual hasta cócteles elegantes ideales para networking y fidelización de clientes."
+    }
   },
   {
     icon: "⋄",
@@ -65,21 +77,33 @@ const SERVICES: ServiceItem[] = [
     name: "Sets Electrónicos",
     description:
       "DJ sets y producción de sonido electrónica para eventos privados. Selección musical curada, equipo de alta fidelidad y una experiencia sonora que mueve la noche.",
-    cta: "Consultar artistas",
+    cta: "Ver detalles",
+    popupInfo: {
+      image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800",
+      desc: "Llevamos la cultura de la música electrónica a tu evento con equipos de sonido e iluminación de última tecnología y una curaduría de DJs que aseguran un nivel internacional para que la pista vibre toda la noche."
+    }
   },
   {
     icon: "❋",
     name: "Eventos Privados",
     description:
       "Veladas íntimas, fiestas exclusivas y reuniones de alto perfil. Máxima discreción, atención personalizada y producción boutique para los momentos más especiales.",
-    cta: "Diseñar tu evento",
+    cta: "Ver detalles",
+    popupInfo: {
+      image: "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&q=80&w=800",
+      desc: "Manejamos eventos privados donde la discreción es primordial. Brindamos una atención meticulosamente personalizada, garantizando una producción boutique sin igual."
+    }
   },
   {
     icon: "◎",
     name: "Producción Integral",
     description:
       "Iluminación, decoración, ambientación y coordinación completa del evento. Un solo punto de contacto para que vos solo disfrutes sin preocuparte de nada.",
-    cta: "Conocer el servicio",
+    cta: "Ver detalles",
+    popupInfo: {
+      image: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=800",
+      desc: "Nuestro equipo coordina íntegramente todo el evento: sonido, luces, escenarios, mobiliario, catering y personal, para que tengas la tranquilidad de dejar todo en manos de expertos desde la idea inicial hasta el aplauso final."
+    }
   },
 ];
 
@@ -88,19 +112,37 @@ const TESTIMONIALS: TestimonialItem[] = [
     quote:
       "Contratamos a Coolibreat para el lanzamiento de nuestra línea premium y superaron todas nuestras expectativas. La barra móvil fue el hit de la noche.",
     author: "Valentina M.",
-    role: "Evento privado · Esquel, Chubut - Patagonia Argentina.",
+    role: "Evento corporativo · Esquel, Chubut",
   },
   {
     quote:
       "La música, la ambientación, el servicio... todo fue impecable. Mi cumple de 30 fue exactamente lo que soñé. Los recomiendo con los ojos cerrados.",
     author: "Lucía P.",
-    role: "Evento privado · Esquel, Chubut - Patagonia Argentina.",
+    role: "Evento privado · Esquel, Chubut",
   },
   {
     quote:
       "Profesionales, creativos y muy atentos a los detalles. El DJ set fue increíble y los tragos artesanales hicieron que todos se quedaran hasta el final.",
     author: "Martín G.",
-    role: "Evento privado · Esquel, Chubut - Patagonia Argentina.",
+    role: "Evento social · Trevelin, Chubut",
+  },
+  {
+    quote:
+      "Una experiencia sensorial de primer nivel. El trato es excelente y resolvieron todo sin que nosotros nos tuviéramos que preocupar por nada.",
+    author: "Sofía R.",
+    role: "Casamiento · Trevelin, Chubut",
+  },
+  {
+    quote:
+      "El nivel de detalle y la dedicación que le ponen marca la diferencia. Lograron captar la esencia de nuestra marca a la perfección en nuestro evento anual.",
+    author: "Esteban L.",
+    role: "Evento corporativo · Esquel, Chubut",
+  },
+  {
+    quote:
+      "Cada rincón estaba pensado. La iluminación, los tragos y la música crearon una atmósfera única. Realmente transformaron el espacio.",
+    author: "Carla T.",
+    role: "Evento social · Bariloche, Río Negro",
   },
 ];
 
@@ -134,11 +176,11 @@ const STATS: StatItem[] = [
 ];
 
 const AMB_CARDS: AmbCard[] = [
-  { emoji: "🌿", tag: "Ambientación", title: "Espacios que cuentan historias", span: "col-span-5" },
-  { emoji: "🍸", tag: "Barra Móvil", title: "Tragos de autor", span: "col-span-3" },
-  { emoji: "🎵", tag: "Electrónica", title: "Sets únicos", span: "col-span-4" },
-  { emoji: "✨", tag: "Corporativo", title: "Imagen impecable", span: "col-span-4" },
-  { emoji: "🌙", tag: "Eventos Privados", title: "Noches que no se olvidan", span: "col-span-8" },
+  { image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800", tag: "Ambientación", title: "Espacios que cuentan historias", span: "col-span-5" },
+  { image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=800", tag: "Barra Móvil", title: "Tragos de autor", span: "col-span-3" },
+  { image: "/assets/electronic_dj.jpg", tag: "Electrónica", title: "Sets únicos", span: "col-span-4" },
+  { image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=800", tag: "Gastronomía", title: "Sabores inolvidables", span: "col-span-4" },
+  { image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=800", tag: "Momentos", title: "Noches que no se olvidan", span: "col-span-8" },
 ];
 
 // ─── Hooks ───────────────────────────────────────────────────
@@ -545,9 +587,229 @@ const About: FC<AboutProps> = ({ logoPrimarySrc }) => (
   </section>
 );
 
+// ─── Drinks Popup ─────────────────────────────────────────────
+const DRINKS_LIST = [
+  { name: "Aperol Spritz", desc: "Aperol, Cinzano Pro-Spritz, soda, rodaja de naranja." },
+  { name: "Gin Tonic Clásico", desc: "Gin premium, agua tónica, botánicos a elección (pepino, cítricos, frutos rojos)." },
+  { name: "Negroni", desc: "Gin, Campari, Vermouth Rosso, piel de naranja." },
+  { name: "Margarita", desc: "Tequila, Triple Sec, jugo de lima, borde con sal." },
+  { name: "Mojito", desc: "Ron blanco, menta fresca, lima, azúcar, soda." },
+  { name: "Old Fashioned", desc: "Whisky (Bourbon), bitter Angostura, azúcar, piel de naranja." },
+  { name: "Caipirinha", desc: "Cachaça, lima fresca, azúcar." },
+  { name: "Moscow Mule", desc: "Vodka, jugo de lima, ginger beer." }
+];
+
+interface DrinksPopupProps {
+  onClose: () => void;
+  onNext?: () => void;
+  onPrev?: () => void;
+}
+
+const DrinksPopup: FC<DrinksPopupProps> = ({ onClose, onNext, onPrev }) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  return (
+    <div 
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 transition-opacity duration-300"
+      style={{ background: "rgba(13,13,15,0.85)", backdropFilter: "blur(10px)" }}
+      onClick={onClose}
+    >
+      {onPrev && (
+        <button 
+          onClick={(e) => { e.stopPropagation(); onPrev(); }}
+          className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 text-5xl p-4 transition-colors z-[110] font-light hidden sm:block"
+          style={{ color: "rgba(245,240,232,0.5)" }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}
+        >
+          ‹
+        </button>
+      )}
+      {onNext && (
+        <button 
+          onClick={(e) => { e.stopPropagation(); onNext(); }}
+          className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 text-5xl p-4 transition-colors z-[110] font-light hidden sm:block"
+          style={{ color: "rgba(245,240,232,0.5)" }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}
+        >
+          ›
+        </button>
+      )}
+
+      <div 
+        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto p-10 rounded-sm"
+        style={{ background: "#1a1a26", border: "1px solid rgba(201,168,76,0.3)", boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button 
+          onClick={onClose}
+          className="absolute top-6 right-6 text-2xl transition-colors duration-300 z-10"
+          style={{ color: "rgba(245,240,232,0.5)" }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}
+        >
+          ✕
+        </button>
+        
+        <SectionLabel text="Nuestra Selección" centered />
+        <h2 
+          className="text-center font-light leading-[1.1] mb-10"
+          style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.5rem", color: "#f5f0e8" }}
+        >
+          Carta de <em style={{ fontStyle: "italic", color: "#e8c97a" }}>Tragos</em>
+        </h2>
+        
+        <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
+          {DRINKS_LIST.map((drink) => (
+            <div key={drink.name} style={{ borderBottom: "1px solid rgba(201,168,76,0.1)", paddingBottom: "1rem" }}>
+              <h4 
+                className="text-lg mb-1"
+                style={{ fontFamily: "'Cormorant Garamond', serif", color: "#c9a84c" }}
+              >
+                {drink.name}
+              </h4>
+              <p className="text-[13px] leading-relaxed" style={{ color: "rgba(245,240,232,0.6)" }}>
+                {drink.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+        
+        {/* Mobile arrows inside the modal bottom */}
+        <div className="flex justify-between mt-8 sm:hidden">
+            {onPrev && (
+                <button onClick={onPrev} className="text-[18px]" style={{ color: "#c9a84c" }}>‹ Anterior</button>
+            )}
+             {onNext && (
+                <button onClick={onNext} className="text-[18px]" style={{ color: "#c9a84c" }}>Siguiente ›</button>
+            )}
+        </div>
+
+        <div className="mt-8 text-center hidden sm:block">
+          <PrimaryBtn onClick={onClose}>Cerrar Carta</PrimaryBtn>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── Service Popup ───────────────────────────────────────────
+interface ServicePopupProps {
+  service: ServiceItem;
+  onClose: () => void;
+  onContact: () => void;
+  onNext?: () => void;
+  onPrev?: () => void;
+}
+
+const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNext, onPrev }) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  return (
+    <div 
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 transition-opacity duration-300"
+      style={{ background: "rgba(13,13,15,0.85)", backdropFilter: "blur(10px)" }}
+      onClick={onClose}
+    >
+      {onPrev && (
+        <button 
+          onClick={(e) => { e.stopPropagation(); onPrev(); }}
+          className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 text-5xl p-4 transition-colors z-[110] font-light hidden sm:block"
+          style={{ color: "rgba(245,240,232,0.5)" }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}
+        >
+          ‹
+        </button>
+      )}
+      {onNext && (
+        <button 
+          onClick={(e) => { e.stopPropagation(); onNext(); }}
+          className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 text-5xl p-4 transition-colors z-[110] font-light hidden sm:block"
+          style={{ color: "rgba(245,240,232,0.5)" }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}
+        >
+          ›
+        </button>
+      )}
+
+      <div 
+        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto p-10 rounded-sm flex flex-col items-center"
+        style={{ background: "#1a1a26", border: "1px solid rgba(201,168,76,0.3)", boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button 
+          onClick={onClose}
+          className="absolute top-6 right-6 text-2xl transition-colors duration-300 z-10"
+          style={{ color: "rgba(245,240,232,0.5)", textShadow: "0 2px 4px rgba(0,0,0,0.5)" }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}
+        >
+          ✕
+        </button>
+        
+        {service.popupInfo?.image && (
+          <div className="w-full aspect-video mb-8 relative rounded-sm overflow-hidden" style={{ border: "1px solid rgba(201,168,76,0.2)" }}>
+            <img 
+              src={service.popupInfo.image} 
+              alt={service.name} 
+              className="w-full h-full object-cover" 
+            />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(26,26,38,1) 0%, transparent 40%)" }} />
+          </div>
+        )}
+        
+        <SectionLabel text="Detalles del Servicio" centered />
+        <h2 
+          className="text-center font-light leading-[1.1] mb-6"
+          style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.5rem", color: "#f5f0e8" }}
+        >
+          {service.name}
+        </h2>
+        
+        <p className="text-[14px] leading-relaxed text-center mb-8 max-w-lg" style={{ color: "rgba(245,240,232,0.7)" }}>
+          {service.popupInfo?.desc || service.description}
+        </p>
+        
+        {/* Mobile arrows inside the modal bottom */}
+        <div className="flex justify-between w-full mb-8 sm:hidden px-4">
+            {onPrev && (
+                <button onClick={onPrev} className="text-[18px]" style={{ color: "#c9a84c" }}>‹ Anterior</button>
+            )}
+             {onNext && (
+                <button onClick={onNext} className="text-[18px]" style={{ color: "#c9a84c" }}>Siguiente ›</button>
+            )}
+        </div>
+
+        <div className="flex flex-wrap gap-4 justify-center w-full">
+          <PrimaryBtn onClick={onContact}>Cotizá tu evento</PrimaryBtn>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ─── Services ────────────────────────────────────────────────
 const Services: FC = () => {
+  const [activePopupIndex, setActivePopupIndex] = useState<number | null>(null);
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+
+  const closePopups = () => {
+    setActivePopupIndex(null);
+  };
+
+  const handleContact = () => {
+    closePopups();
+    setTimeout(() => scrollTo("contacto"), 300);
+  };
 
   return (
     <section id="servicios" className="py-28 px-8 md:px-16" style={{ background: "#13131a" }}>
@@ -565,10 +827,36 @@ const Services: FC = () => {
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-px" style={{ background: "rgba(201,168,76,0.08)" }}>
         {SERVICES.map((svc, i) => (
           <FadeIn key={svc.name} delay={i * 0.08}>
-            <ServiceCard service={svc} onCta={() => scrollTo("contacto")} />
+            <ServiceCard 
+              service={svc} 
+              onCta={() => {
+                if (svc.cta === "Ver carta de tragos" || svc.popupInfo) {
+                  setActivePopupIndex(i);
+                } else {
+                  scrollTo("contacto");
+                }
+              }} 
+            />
           </FadeIn>
         ))}
       </div>
+
+      {activePopupIndex !== null && SERVICES[activePopupIndex].cta === "Ver carta de tragos" && (
+        <DrinksPopup 
+          onClose={closePopups} 
+          onNext={() => setActivePopupIndex((activePopupIndex + 1) % SERVICES.length)}
+          onPrev={() => setActivePopupIndex((activePopupIndex - 1 + SERVICES.length) % SERVICES.length)}
+        />
+      )}
+      {activePopupIndex !== null && SERVICES[activePopupIndex].cta !== "Ver carta de tragos" && (
+        <ServicePopup 
+          service={SERVICES[activePopupIndex]} 
+          onClose={closePopups} 
+          onContact={handleContact}
+          onNext={() => setActivePopupIndex((activePopupIndex + 1) % SERVICES.length)}
+          onPrev={() => setActivePopupIndex((activePopupIndex - 1 + SERVICES.length) % SERVICES.length)}
+        />
+      )}
     </section>
   );
 };
@@ -710,10 +998,15 @@ const AmbianceCard: FC<AmbianceCardProps> = ({ card }) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div className="absolute inset-0 flex items-center justify-center text-[5.5rem] opacity-20 pointer-events-none select-none">
-        {card.emoji}
+      <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
+        <img 
+          src={card.image} 
+          alt={card.title} 
+          className="w-full h-full object-cover transition-transform duration-700" 
+          style={{ opacity: 0.6, transform: hovered ? "scale(1.1)" : "scale(1)" }} 
+        />
       </div>
-      <div className="absolute inset-0" style={{ background: "linear-gradient(to top,rgba(13,13,15,0.95) 0%,transparent 55%)" }} />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(13,13,15,0.95) 0%, rgba(13,13,15,0.1) 80%)" }} />
       <p className="relative z-10 text-[10px] tracking-[0.32em] uppercase mb-1" style={{ color: "#c9a84c" }}>
         {card.tag}
       </p>
@@ -777,7 +1070,7 @@ const Process: FC = () => (
 
 // ─── Gallery ──────────────────────────────────────────────────
 const GALLERY_IMAGES = [
-  "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
+  "/assets/ambientacion.jpg",
   "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800",
   "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=800",
   "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&q=80&w=800",
@@ -827,26 +1120,130 @@ const Gallery: FC = () => (
 );
 
 // ─── Testimonials ─────────────────────────────────────────────
-const Testimonials: FC = () => (
-  <section className="py-28 px-8 md:px-16">
-    <div className="max-w-6xl mx-auto">
-      <FadeIn className="mb-16">
-        <SectionLabel text="Lo que dicen" />
-        <SectionTitle>
-          Voces que<br />
-          <em style={{ fontStyle: "italic", color: "#e8c97a" }}>nos inspiran</em>
-        </SectionTitle>
-      </FadeIn>
-      <div className="grid md:grid-cols-3 gap-5 items-stretch">
-        {TESTIMONIALS.map((t, i) => (
-          <FadeIn key={t.author} delay={i * 0.1}>
-            <TestimonialCard item={t} />
-          </FadeIn>
-        ))}
+const Testimonials: FC = () => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeftPos = useRef(0);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    let animId: number;
+    let lastTime: number;
+
+    if (el.scrollLeft === 0) {
+      el.scrollLeft = el.scrollWidth / 4;
+    }
+
+    const scroll = (time: number) => {
+      if (!lastTime) lastTime = time;
+      const dt = time - lastTime;
+      lastTime = time;
+      
+      if (!isHovered && !isDragging.current) {
+        el.scrollLeft += dt * 0.05; 
+      }
+      
+      if (!isDragging.current) {
+        const singleCopyWidth = el.scrollWidth / 4;
+        if (el.scrollLeft >= singleCopyWidth * 3) {
+          el.scrollLeft -= singleCopyWidth;
+        } else if (el.scrollLeft <= singleCopyWidth / 2) {
+          el.scrollLeft += singleCopyWidth;
+        }
+      }
+      
+      animId = requestAnimationFrame(scroll);
+    };
+    animId = requestAnimationFrame(scroll);
+    
+    return () => cancelAnimationFrame(animId);
+  }, [isHovered]);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    isDragging.current = true;
+    setIsHovered(true);
+    if (!scrollRef.current) return;
+    startX.current = e.pageX - scrollRef.current.offsetLeft;
+    scrollLeftPos.current = scrollRef.current.scrollLeft;
+  };
+
+  const handleMouseLeave = () => {
+    isDragging.current = false;
+    setIsHovered(false);
+  };
+
+  const handleMouseUp = () => {
+    isDragging.current = false;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX.current) * 1.5; 
+    scrollRef.current.scrollLeft = scrollLeftPos.current - walk;
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    isDragging.current = true;
+    setIsHovered(true);
+    if (!scrollRef.current) return;
+    startX.current = e.touches[0].pageX - scrollRef.current.offsetLeft;
+    scrollLeftPos.current = scrollRef.current.scrollLeft;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging.current || !scrollRef.current) return;
+    const x = e.touches[0].pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX.current) * 1.5;
+    scrollRef.current.scrollLeft = scrollLeftPos.current - walk;
+  };
+
+  return (
+    <section className="pt-8 pb-28 md:pt-12 overflow-hidden select-none relative">
+      <div className="max-w-6xl mx-auto px-8 md:px-16 mb-16 flex justify-between items-end flex-wrap gap-6">
+        <FadeIn>
+          <SectionLabel text="Lo que dicen" />
+          <SectionTitle>
+            Voces que<br />
+            <em style={{ fontStyle: "italic", color: "#e8c97a" }}>nos inspiran</em>
+          </SectionTitle>
+        </FadeIn>
       </div>
-    </div>
-  </section>
-);
+
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+      
+      <div 
+        className="w-full flex overflow-x-auto hide-scrollbar" 
+        ref={scrollRef}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={handleMouseLeave}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleMouseUp}
+        onTouchMove={handleTouchMove}
+        style={{ cursor: isDragging.current ? "grabbing" : (isHovered ? "grab" : "default") }}
+      >
+        <div className="flex gap-5 px-5" style={{ width: "max-content" }}>
+          {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
+            <div key={`${t.author}-${i}`} className="w-[320px] md:w-[380px] shrink-0">
+              <TestimonialCard item={t} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
 interface TestimonialCardProps {
   item: TestimonialItem;
@@ -1117,7 +1514,7 @@ const Footer: FC<FooterProps> = ({ logoPrimarySrc }) => {
 
   return (
     <footer className="py-10 px-8 md:px-16" style={{ background: "#13131a", borderTop: "1px solid rgba(201,168,76,0.18)" }}>
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-8 text-center md:text-left">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center gap-8 text-center md:text-left">
         <div className="flex flex-col items-center md:items-start gap-2 justify-self-center md:justify-self-start">
           <button onClick={() => scrollTo("inicio")} className="flex items-center gap-3 w-max">
             <div className="relative h-8 w-8">
@@ -1136,12 +1533,12 @@ const Footer: FC<FooterProps> = ({ logoPrimarySrc }) => {
           </p>
         </div>
 
-        <ul className="flex flex-wrap justify-center gap-6 md:gap-8 list-none justify-self-center">
+        <ul className="flex flex-wrap md:flex-nowrap justify-center gap-5 md:gap-7 list-none justify-self-center">
           {links.map((l) => (
             <li key={l.id}>
               <button
                 onClick={() => scrollTo(l.id)}
-                className="text-[11px] tracking-[0.15em] uppercase transition-colors duration-300"
+                className="text-[11px] tracking-[0.15em] uppercase transition-colors duration-300 whitespace-nowrap"
                 style={{ color: "rgba(245,240,232,0.4)" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.4)")}
@@ -1151,8 +1548,6 @@ const Footer: FC<FooterProps> = ({ logoPrimarySrc }) => {
             </li>
           ))}
         </ul>
-
-        {/* Separador vacío para equilibrar la grilla de 3 columnas y garantizar el centrado exacto */}
         <div className="hidden md:block"></div>
       </div>
     </footer>
@@ -1200,6 +1595,8 @@ export default function App() {
         @keyframes floatBird { 0%,100% { transform:translate(-50%,-50%) rotate(-2deg); } 50% { transform:translate(-50%,-54%) rotate(2deg); } }
         @keyframes rotateSlow { to { transform:rotate(360deg); } }
         @keyframes scrollPulse { 0% { transform:scaleY(0); transform-origin:top; opacity:0; } 50% { transform:scaleY(1); transform-origin:top; opacity:1; } 100% { transform:scaleY(1); transform-origin:bottom; opacity:0; } }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-50% - 10px)); } }
+        .animate-marquee-hover:hover { animation-play-state: paused !important; }
         * { margin:0; padding:0; box-sizing:border-box; }
         html { scroll-behavior:smooth; }
         body { background:#0d0d0f; color:#f5f0e8; font-family:'Jost',sans-serif; font-weight:300; overflow-x:hidden; }

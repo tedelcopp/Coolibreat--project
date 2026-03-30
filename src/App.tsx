@@ -61,8 +61,8 @@ const SERVICES: ServiceItem[] = [
       "Lanzamientos de producto, galas empresariales, teambuildings y cócteles de networking. Proyectamos la imagen de tu empresa con clase y profesionalismo.",
     cta: "Ver detalles",
     popupInfo: {
-      image: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=800",
-      desc: "Diseñamos eventos que reflejan fielmente la identidad de tu marca. Con un enfoque en la excelencia corporativa, ofrecemos desde la producción de lanzamientos de gran impacto visual hasta cócteles elegantes ideales para networking y fidelización de clientes."
+      image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
+      desc: "Reflejamos la identidad de tu marca con una propuesta integral de alta gama:\n\n• CATERING A MEDIDA: Diseñamos un menú exclusivo adaptado a los objetivos de tu empresa.\n• CAFETERÍA DE ESPECIALIDAD: Servicio de baristas con blends seleccionados y pastelería premium.\n• OPCIONES DULCES Y SALADAS: Finger food gourmet ideal para jornadas de capacitación y networking.\n• BARRA SIN ALCOHOL: Amplia variedad de mocktails de autor y jugos naturales prensados.\n• BRINDIS DE HONOR: Cierre exclusivo con cristalería fina para agasajar a clientes y equipo."
     }
   },
   {
@@ -590,13 +590,90 @@ const About: FC<AboutProps> = ({ logoPrimarySrc }) => (
 // ─── Drinks Popup ─────────────────────────────────────────────
 const DRINKS_LIST = [
   { name: "Aperol Spritz", desc: "Aperol, Cinzano Pro-Spritz, soda, rodaja de naranja." },
-  { name: "Gin Tonic Clásico", desc: "Gin premium, agua tónica, botánicos a elección (pepino, cítricos, frutos rojos)." },
+  { name: "Gin Tonic de Autor", desc: "Gin premium, agua tónica, botánicos a elección (hibisco, pepino, cítricos)." },
   { name: "Negroni", desc: "Gin, Campari, Vermouth Rosso, piel de naranja." },
   { name: "Margarita", desc: "Tequila, Triple Sec, jugo de lima, borde con sal." },
-  { name: "Mojito", desc: "Ron blanco, menta fresca, lima, azúcar, soda." },
+  { name: "Mojito Clásico", desc: "Ron blanco, menta fresca, lima, azúcar, soda." },
   { name: "Old Fashioned", desc: "Whisky (Bourbon), bitter Angostura, azúcar, piel de naranja." },
-  { name: "Caipirinha", desc: "Cachaça, lima fresca, azúcar." },
-  { name: "Moscow Mule", desc: "Vodka, jugo de lima, ginger beer." }
+  { name: "Caipirinha", desc: "Cachaça, lima fresca, azúcar, hielo triturado." },
+  { name: "Moscow Mule", desc: "Vodka, jugo de lima, ginger beer, servido en taza de cobre." },
+  { name: "Cynar Julep", desc: "Cynar, jugo de pomelo o tónica, azúcar, menta fresca y toque de limón." },
+  { name: "Cosmopolitan", desc: "Vodka, Cointreau, jugo de lima y un toque de jugo de arándanos." },
+  { name: "Penicillin", desc: "Whisky escocés, jugo fresco de limón, almíbar de jengibre y miel." },
+  { name: "Negroni Ahumado con Eucalipto", desc: "Gin, Campari, Vermouth Rosso, ahumado en vivo con hojas de eucalipto." },
+  { name: "Negroni Sbagliato", desc: "Campari, Vermouth Rosso y espumante (Prosecco), piel de naranja." },
+  { name: "French 75", desc: "Gin, jugo de limón, almíbar simple, coronado con espumante." },
+  { name: "El Presidente", desc: "Ron blanco, Vermouth Blanco (Dry), Curaçao de naranja, granadina." }
+];
+
+const VIP_LIST = [
+  { name: "Smoked Old Fashioned", desc: "Bourbon añejo, bitter aromático, azúcar mascabado, ahumado con madera de roble." },
+  { name: "Clarified Piña Colada", desc: "Ron añejo, mix de piña y coco, clarificado mediante filtrado de leche para un acabado 100% cristalino." },
+  { name: "Espresso Martini de Especialidad", desc: "Vodka premium, licor artesanal de café, espresso recién extraído con notas a chocolate." },
+  { name: "Gold Rush", desc: "Bourbon premium, jugo de limón recién exprimido, almíbar de miel silvestre." },
+  { name: "New York Sour", desc: "Whisky (Rye o Bourbon), jugo de limón, almíbar simple, float de vino tinto Malbec." },
+  { name: "Lynchburg Lemonade", desc: "Whisky Tennessee (Jack Daniel's), Triple Sec, jugo de limón, dash de lima-limón." },
+  { name: "Rob Roy", desc: "Whisky escocés (Scotch), Vermouth Rosso, bitter aromático, cereza marrasquino." },
+  { name: "Sazerac", desc: "Cognac o Rye Whisky, dash de absenta, azúcar, bitter Peychaud's, piel de limón." },
+  { name: "Boulevardier", desc: "Bourbon o Rye Whisky, Campari, Vermouth Rosso, piel de naranja." },
+  { name: "Perfect Martini", desc: "Gin London Dry, partes iguales de Vermouth Dry y Rosso, piel de limón." },
+  { name: "Dirty Martini", desc: "Vodka o Gin premium, Vermouth Dry, salmuera de aceitunas, clásico decorado." },
+  { name: "Vesper Martini", desc: "Gin, Vodka, Lillet Blanc (o vermouth francés), piel de limón." }
+];
+
+const CUBATAS_LIST = [
+  { name: "Fernet Cola", desc: "El clásico argentino. Fernet Branca, bebida cola, hielo rolito." },
+  { name: "Campari Orange", desc: "Campari, jugo de naranja dulce, rodaja de naranja." },
+  { name: "Cuba Libre", desc: "Ron dorado, bebida cola, dash y twist de lima fresca." },
+  { name: "Cynar Pomelo", desc: "Cynar, gaseosa o jugo de pomelo, rodaja de pomelo rosado." },
+  { name: "Gancia Batido", desc: "Gancia, jugo de limón, azúcar, batido con abundante hielo." },
+  { name: "Vodka Saborizado", desc: "Vodka premium acompañado de energizante o jugos naturales." },
+  { name: "Vermuth", desc: "Vermuth Rosso o Bianco, soda, rodaja de limón o naranja." },
+  { name: "Gin Tonic Clásico", desc: "Gin London Dry, agua tónica, rodaja de limón o pepino." },
+  { name: "Negroni", desc: "Gin, Campari, Vermouth Rosso, piel de naranja." },
+  { name: "Tom Collins", desc: "Gin, jugo de limón, almíbar simple, soda." }
+];
+
+const BAR_TIERS = [
+  {
+    name: "Starter",
+    subtitle: "Para reuniones relajadas",
+    features: [
+      "Servicio por 4 horas",
+      "Coctelería de método directo",
+      "Incluye cerveza y bebidas s/alcohol",
+      "10 opciones fijas de tragos en carta",
+      "Cristalería estándar (trago corto y largo)",
+      "Garnish clásico (Limón, Pepino, Romero)",
+      "Hielo rolito tradicional"
+    ]
+  },
+  {
+    name: "Premium",
+    subtitle: "La experiencia recomendada",
+    features: [
+      "Servicio extendido por 6 horas",
+      "Marcas líderes y etiquetas importadas",
+      "Incluye cervezas premium y espumantes",
+      "15 opciones en carta (incluye Cubatas especiales)",
+      "Cristalería fina de vidrio y copones",
+      "Garnish botánico orgánico y deshidratados",
+      "Hielo cristalino artesanal y en esferas"
+    ]
+  },
+  {
+    name: "VIP",
+    subtitle: "Nivel boutique",
+    features: [
+      "Duración libre sin límite de horas",
+      "100% de la barra con etiquetas Ultra Premium",
+      "Carta de autor diseñada 100% a medida",
+      "Bandejeo de bebibas y atención en mesa",
+      "Cristalería de autor",
+      "Garnish exótico y humos aromatizantes en vivo",
+      "Incluye mocktails y/o bebidas sin alcohol"
+    ]
+  }
 ];
 
 interface DrinksPopupProps {
@@ -612,13 +689,13 @@ const DrinksPopup: FC<DrinksPopupProps> = ({ onClose, onNext, onPrev }) => {
   }, []);
 
   return (
-    <div 
+    <div
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 transition-opacity duration-300"
       style={{ background: "rgba(13,13,15,0.85)", backdropFilter: "blur(10px)" }}
       onClick={onClose}
     >
       {onPrev && (
-        <button 
+        <button
           onClick={(e) => { e.stopPropagation(); onPrev(); }}
           className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 text-5xl p-4 transition-colors z-[110] font-light hidden sm:block"
           style={{ color: "rgba(245,240,232,0.5)" }}
@@ -629,7 +706,7 @@ const DrinksPopup: FC<DrinksPopupProps> = ({ onClose, onNext, onPrev }) => {
         </button>
       )}
       {onNext && (
-        <button 
+        <button
           onClick={(e) => { e.stopPropagation(); onNext(); }}
           className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 text-5xl p-4 transition-colors z-[110] font-light hidden sm:block"
           style={{ color: "rgba(245,240,232,0.5)" }}
@@ -640,12 +717,12 @@ const DrinksPopup: FC<DrinksPopupProps> = ({ onClose, onNext, onPrev }) => {
         </button>
       )}
 
-      <div 
-        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto p-10 rounded-sm"
+      <div
+        className="relative w-full max-w-4xl max-h-[85vh] overflow-y-auto p-10 rounded-sm"
         style={{ background: "#1a1a26", border: "1px solid rgba(201,168,76,0.3)", boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)" }}
         onClick={(e) => e.stopPropagation()}
       >
-        <button 
+        <button
           onClick={onClose}
           className="absolute top-6 right-6 text-2xl transition-colors duration-300 z-10"
           style={{ color: "rgba(245,240,232,0.5)" }}
@@ -654,19 +731,44 @@ const DrinksPopup: FC<DrinksPopupProps> = ({ onClose, onNext, onPrev }) => {
         >
           ✕
         </button>
-        
-        <SectionLabel text="Nuestra Selección" centered />
-        <h2 
+
+        <SectionLabel text="Nuestros Planes" centered />
+        <h2
           className="text-center font-light leading-[1.1] mb-10"
           style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.5rem", color: "#f5f0e8" }}
         >
-          Carta de <em style={{ fontStyle: "italic", color: "#e8c97a" }}>Tragos</em>
+          Servicio de <em style={{ fontStyle: "italic", color: "#e8c97a" }}>Barras Móviles</em>
         </h2>
-        
+
+        <div className="grid lg:grid-cols-3 gap-6 mb-16">
+          {BAR_TIERS.map(tier => (
+            <div key={tier.name} className="p-7 rounded-sm flex flex-col h-full transition-transform duration-300 hover:-translate-y-1" style={{ background: "rgba(201,168,76,0.03)", border: "1px solid rgba(201,168,76,0.18)" }}>
+              <h3 className="text-2xl mb-1 text-center font-light" style={{ fontFamily: "'Cormorant Garamond', serif", color: "#c9a84c" }}>{tier.name}</h3>
+              <p className="text-[10px] tracking-widest mb-7 text-center uppercase" style={{ color: "rgba(245,240,232,0.4)" }}>{tier.subtitle}</p>
+              <ul className="text-[13px] leading-loose text-left flex-1" style={{ color: "rgba(245,240,232,0.7)" }}>
+                {tier.features.map((f, i) => (
+                  <li key={i} className="mb-3 flex items-start gap-4">
+                    <span className="text-[9px] mt-[6px]" style={{ color: "#c9a84c" }}>◈</span>
+                    <span className="flex-1">{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <SectionLabel text="Nuestra Selección" centered />
+        <h2
+          className="text-center font-light leading-[1.1] mb-10"
+          style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.5rem", color: "#f5f0e8" }}
+        >
+          Cubatas<em style={{ fontStyle: "italic", color: "#e8c97a" }}> Clásicas</em>
+        </h2>
+
         <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
-          {DRINKS_LIST.map((drink) => (
+          {CUBATAS_LIST.map((drink) => (
             <div key={drink.name} style={{ borderBottom: "1px solid rgba(201,168,76,0.1)", paddingBottom: "1rem" }}>
-              <h4 
+              <h4
                 className="text-lg mb-1"
                 style={{ fontFamily: "'Cormorant Garamond', serif", color: "#c9a84c" }}
               >
@@ -678,15 +780,70 @@ const DrinksPopup: FC<DrinksPopupProps> = ({ onClose, onNext, onPrev }) => {
             </div>
           ))}
         </div>
-        
+
+        <div className="mt-16 mb-10">
+          <SectionLabel text="Tragos Elaborados" centered />
+          <h2
+            className="text-center font-light leading-[1.1] mt-6"
+            style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.5rem", color: "#f5f0e8" }}
+          >
+            Coctelería<em style={{ fontStyle: "italic", color: "#e8c97a" }}> Clásica</em>
+          </h2>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
+          {DRINKS_LIST.map((drink) => (
+            <div key={drink.name} style={{ borderBottom: "1px solid rgba(201,168,76,0.1)", paddingBottom: "1rem" }}>
+              <h4
+                className="text-lg mb-1"
+                style={{ fontFamily: "'Cormorant Garamond', serif", color: "#c9a84c" }}
+              >
+                {drink.name}
+              </h4>
+              <p className="text-[13px] leading-relaxed" style={{ color: "rgba(245,240,232,0.6)" }}>
+                {drink.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-16 mb-10">
+          <SectionLabel text="Tragos de Autor" centered />
+          <h2
+            className="text-center font-light leading-[1.1] mt-6 mb-4"
+            style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.5rem", color: "#f5f0e8" }}
+          >
+            Coctelería<em style={{ fontStyle: "italic", color: "#e8c97a" }}> VIP</em>
+          </h2>
+          <p className="text-center max-w-lg mx-auto text-[13px] leading-relaxed" style={{ color: "rgba(245,240,232,0.6)" }}>
+            Incluye todas las cubatas y coctelería clásica + los tragos seleccionados a continuación.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
+          {VIP_LIST.map((drink) => (
+            <div key={drink.name} style={{ borderBottom: "1px solid rgba(201,168,76,0.1)", paddingBottom: "1rem" }}>
+              <h4
+                className="text-lg mb-1"
+                style={{ fontFamily: "'Cormorant Garamond', serif", color: "#c9a84c" }}
+              >
+                {drink.name}
+              </h4>
+              <p className="text-[13px] leading-relaxed" style={{ color: "rgba(245,240,232,0.6)" }}>
+                {drink.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+
         {/* Mobile arrows inside the modal bottom */}
         <div className="flex justify-between mt-8 sm:hidden">
-            {onPrev && (
-                <button onClick={onPrev} className="text-[18px]" style={{ color: "#c9a84c" }}>‹ Anterior</button>
-            )}
-             {onNext && (
-                <button onClick={onNext} className="text-[18px]" style={{ color: "#c9a84c" }}>Siguiente ›</button>
-            )}
+          {onPrev && (
+            <button onClick={onPrev} className="text-[18px]" style={{ color: "#c9a84c" }}>‹ Anterior</button>
+          )}
+          {onNext && (
+            <button onClick={onNext} className="text-[18px]" style={{ color: "#c9a84c" }}>Siguiente ›</button>
+          )}
         </div>
 
         <div className="mt-8 text-center hidden sm:block">
@@ -713,13 +870,13 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
   }, []);
 
   return (
-    <div 
+    <div
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 transition-opacity duration-300"
       style={{ background: "rgba(13,13,15,0.85)", backdropFilter: "blur(10px)" }}
       onClick={onClose}
     >
       {onPrev && (
-        <button 
+        <button
           onClick={(e) => { e.stopPropagation(); onPrev(); }}
           className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 text-5xl p-4 transition-colors z-[110] font-light hidden sm:block"
           style={{ color: "rgba(245,240,232,0.5)" }}
@@ -730,7 +887,7 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
         </button>
       )}
       {onNext && (
-        <button 
+        <button
           onClick={(e) => { e.stopPropagation(); onNext(); }}
           className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 text-5xl p-4 transition-colors z-[110] font-light hidden sm:block"
           style={{ color: "rgba(245,240,232,0.5)" }}
@@ -741,12 +898,12 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
         </button>
       )}
 
-      <div 
+      <div
         className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto p-10 rounded-sm flex flex-col items-center"
         style={{ background: "#1a1a26", border: "1px solid rgba(201,168,76,0.3)", boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)" }}
         onClick={(e) => e.stopPropagation()}
       >
-        <button 
+        <button
           onClick={onClose}
           className="absolute top-6 right-6 text-2xl transition-colors duration-300 z-10"
           style={{ color: "rgba(245,240,232,0.5)", textShadow: "0 2px 4px rgba(0,0,0,0.5)" }}
@@ -755,38 +912,38 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
         >
           ✕
         </button>
-        
+
         {service.popupInfo?.image && (
           <div className="w-full aspect-video mb-8 relative rounded-sm overflow-hidden" style={{ border: "1px solid rgba(201,168,76,0.2)" }}>
-            <img 
-              src={service.popupInfo.image} 
-              alt={service.name} 
-              className="w-full h-full object-cover" 
+            <img
+              src={service.popupInfo.image}
+              alt={service.name}
+              className="w-full h-full object-cover"
             />
             <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(26,26,38,1) 0%, transparent 40%)" }} />
           </div>
         )}
-        
+
         <SectionLabel text="Detalles del Servicio" centered />
-        <h2 
+        <h2
           className="text-center font-light leading-[1.1] mb-6"
           style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.5rem", color: "#f5f0e8" }}
         >
           {service.name}
         </h2>
-        
+
         <p className="text-[14px] leading-relaxed text-center mb-8 max-w-lg" style={{ color: "rgba(245,240,232,0.7)" }}>
           {service.popupInfo?.desc || service.description}
         </p>
-        
+
         {/* Mobile arrows inside the modal bottom */}
         <div className="flex justify-between w-full mb-8 sm:hidden px-4">
-            {onPrev && (
-                <button onClick={onPrev} className="text-[18px]" style={{ color: "#c9a84c" }}>‹ Anterior</button>
-            )}
-             {onNext && (
-                <button onClick={onNext} className="text-[18px]" style={{ color: "#c9a84c" }}>Siguiente ›</button>
-            )}
+          {onPrev && (
+            <button onClick={onPrev} className="text-[18px]" style={{ color: "#c9a84c" }}>‹ Anterior</button>
+          )}
+          {onNext && (
+            <button onClick={onNext} className="text-[18px]" style={{ color: "#c9a84c" }}>Siguiente ›</button>
+          )}
         </div>
 
         <div className="flex flex-wrap gap-4 justify-center w-full">
@@ -827,31 +984,31 @@ const Services: FC = () => {
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-px" style={{ background: "rgba(201,168,76,0.08)" }}>
         {SERVICES.map((svc, i) => (
           <FadeIn key={svc.name} delay={i * 0.08}>
-            <ServiceCard 
-              service={svc} 
+            <ServiceCard
+              service={svc}
               onCta={() => {
                 if (svc.cta === "Ver carta de tragos" || svc.popupInfo) {
                   setActivePopupIndex(i);
                 } else {
                   scrollTo("contacto");
                 }
-              }} 
+              }}
             />
           </FadeIn>
         ))}
       </div>
 
       {activePopupIndex !== null && SERVICES[activePopupIndex].cta === "Ver carta de tragos" && (
-        <DrinksPopup 
-          onClose={closePopups} 
+        <DrinksPopup
+          onClose={closePopups}
           onNext={() => setActivePopupIndex((activePopupIndex + 1) % SERVICES.length)}
           onPrev={() => setActivePopupIndex((activePopupIndex - 1 + SERVICES.length) % SERVICES.length)}
         />
       )}
       {activePopupIndex !== null && SERVICES[activePopupIndex].cta !== "Ver carta de tragos" && (
-        <ServicePopup 
-          service={SERVICES[activePopupIndex]} 
-          onClose={closePopups} 
+        <ServicePopup
+          service={SERVICES[activePopupIndex]}
+          onClose={closePopups}
           onContact={handleContact}
           onNext={() => setActivePopupIndex((activePopupIndex + 1) % SERVICES.length)}
           onPrev={() => setActivePopupIndex((activePopupIndex - 1 + SERVICES.length) % SERVICES.length)}
@@ -999,11 +1156,11 @@ const AmbianceCard: FC<AmbianceCardProps> = ({ card }) => {
       onMouseLeave={() => setHovered(false)}
     >
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-        <img 
-          src={card.image} 
-          alt={card.title} 
-          className="w-full h-full object-cover transition-transform duration-700" 
-          style={{ opacity: 0.6, transform: hovered ? "scale(1.1)" : "scale(1)" }} 
+        <img
+          src={card.image}
+          alt={card.title}
+          className="w-full h-full object-cover transition-transform duration-700"
+          style={{ opacity: 0.6, transform: hovered ? "scale(1.1)" : "scale(1)" }}
         />
       </div>
       <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(13,13,15,0.95) 0%, rgba(13,13,15,0.1) 80%)" }} />
@@ -1070,12 +1227,15 @@ const Process: FC = () => (
 
 // ─── Gallery ──────────────────────────────────────────────────
 const GALLERY_IMAGES = [
+  "/assets/gallery_4.jpg",
+  "/assets/gallery_3.jpg",
   "/assets/ambientacion.jpg",
-  "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800",
   "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=800",
-  "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&q=80&w=800",
-  "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=800",
-  "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&q=80&w=800"
+  "/assets/electronic_dj.jpg",
+  "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800",
+  "/assets/gallery_2.jpg",
+  "/assets/gallery_1.jpg",
+  "/assets/gallery_5.jpg"
 ];
 
 const Gallery: FC = () => (
@@ -1123,7 +1283,7 @@ const Gallery: FC = () => (
 const Testimonials: FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
-  
+
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeftPos = useRef(0);
@@ -1142,11 +1302,11 @@ const Testimonials: FC = () => {
       if (!lastTime) lastTime = time;
       const dt = time - lastTime;
       lastTime = time;
-      
+
       if (!isHovered && !isDragging.current) {
-        el.scrollLeft += dt * 0.05; 
+        el.scrollLeft += dt * 0.05;
       }
-      
+
       if (!isDragging.current) {
         const singleCopyWidth = el.scrollWidth / 4;
         if (el.scrollLeft >= singleCopyWidth * 3) {
@@ -1155,11 +1315,11 @@ const Testimonials: FC = () => {
           el.scrollLeft += singleCopyWidth;
         }
       }
-      
+
       animId = requestAnimationFrame(scroll);
     };
     animId = requestAnimationFrame(scroll);
-    
+
     return () => cancelAnimationFrame(animId);
   }, [isHovered]);
 
@@ -1184,7 +1344,7 @@ const Testimonials: FC = () => {
     if (!isDragging.current || !scrollRef.current) return;
     e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.5; 
+    const walk = (x - startX.current) * 1.5;
     scrollRef.current.scrollLeft = scrollLeftPos.current - walk;
   };
 
@@ -1219,9 +1379,9 @@ const Testimonials: FC = () => {
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
-      
-      <div 
-        className="w-full flex overflow-x-auto hide-scrollbar" 
+
+      <div
+        className="w-full flex overflow-x-auto hide-scrollbar"
         ref={scrollRef}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={handleMouseLeave}

@@ -1077,6 +1077,62 @@ const ServiceCard: FC<ServiceCardProps> = ({ service, onCta }) => {
   );
 };
 
+const BRANDS: { name: string; logo: string; height?: number }[] = [
+  { name: "Fernet Branca", logo: "/assets/brands/branca.png", height: 160 },
+  { name: "Campari", logo: "/assets/brands/campari.svg" },
+  { name: "Aperol", logo: "/assets/brands/aperol.svg" },
+  { name: "Bombay Sapphire", logo: "/assets/brands/bombay-sapphire.svg" },
+  { name: "Absolut Vodka", logo: "/assets/brands/absolut.svg" },
+  { name: "Jose Cuervo", logo: "/assets/brands/jose-cuervo.svg" },
+  { name: "Heineken", logo: "/assets/brands/heineken.png" },
+];
+
+const BrandCarousel: FC = () => {
+  const items = [...BRANDS, ...BRANDS];
+  const LOGO_H = 84;
+  return (
+    <section className="py-20 px-8 md:px-16">
+      <div className="max-w-6xl mx-auto">
+        <FadeIn className="mb-10 text-center">
+          <SectionTitle>
+            Marcas con las que<br />
+            <em style={{ fontStyle: "italic", color: "#e8c97a" }}>trabajamos</em>
+          </SectionTitle>
+        </FadeIn>
+
+        <div
+          className="mt-12 rounded-xl overflow-hidden"
+          style={{
+            background: "#ffffff",
+            border: "1px solid rgba(0,0,0,0.06)",
+          }}
+        >
+          <div className="overflow-hidden py-6">
+            <div
+              className="flex gap-14 items-center animate-marquee-hover"
+              style={{ animation: "marquee 18s linear infinite" }}
+            >
+              {items.map((brand, i) => (
+                <div
+                  key={`${brand.name}-${i}`}
+                className="flex items-center justify-center min-w-[180px]"
+                >
+                  <img
+                    src={brand.logo}
+                    alt={brand.name}
+                  className="w-auto object-contain"
+                    style={{ height: brand.height ?? LOGO_H }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 // ─── Experience Strip ─────────────────────────────────────────
 const ExperienceStrip: FC = () => {
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -1227,15 +1283,15 @@ const Process: FC = () => (
 
 // ─── Gallery ──────────────────────────────────────────────────
 const GALLERY_IMAGES = [
-  "/assets/gallery_4.jpg",
-  "/assets/gallery_3.jpg",
-  "/assets/ambientacion.jpg",
+  "/assets/gallery/gallery_4.jpg",
+  "/assets/gallery/gallery_3.jpg",
+  "/assets/gallery/gallery_6.jpg",
   "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=800",
-  "/assets/electronic_dj.jpg",
+  "/assets/gallery/gallery_7.jpg",
   "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800",
-  "/assets/gallery_2.jpg",
-  "/assets/gallery_1.jpg",
-  "/assets/gallery_5.jpg"
+  "/assets/gallery/gallery_2.jpg",
+  "/assets/gallery/gallery_1.jpg",
+  "/assets/gallery/gallery_5.jpg"
 ];
 
 const Gallery: FC = () => (
@@ -1689,7 +1745,7 @@ const Footer: FC<FooterProps> = ({ logoPrimarySrc }) => {
             </span>
           </button>
           <p className="text-[11px] tracking-wide" style={{ color: "rgba(245,240,232,0.22)" }}>
-            © 2025 Coolibreat. Todos los derechos reservados.
+            © 2026 Coolibreat. Todos los derechos reservados.
           </p>
         </div>
 
@@ -1743,8 +1799,8 @@ const FloatingWhatsApp: FC = () => {
 
 // ─── App ─────────────────────────────────────────────────────
 export default function App() {
-  const LOGO_PRIMARY_SRC = "/assets/logo1.png";
-  const LOGO_SECONDARY_SRC = "/assets/logo2.png";
+  const LOGO_PRIMARY_SRC = "/assets/logos/logo1.png";
+  const LOGO_SECONDARY_SRC = "/assets/logos/logo2.png";
 
   return (
     <>
@@ -1773,6 +1829,7 @@ export default function App() {
         <Hero logoPrimarySrc={LOGO_PRIMARY_SRC} logoSecondarySrc={LOGO_SECONDARY_SRC} />
         <About logoPrimarySrc={LOGO_PRIMARY_SRC} logoSecondarySrc={LOGO_SECONDARY_SRC} />
         <Services />
+        <BrandCarousel />
         <ExperienceStrip />
         <Ambiance />
         <Process />

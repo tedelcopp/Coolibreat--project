@@ -1078,20 +1078,99 @@ const ServiceCard: FC<ServiceCardProps> = ({ service, onCta }) => {
 };
 
 const BRANDS: { name: string; logo: string; height?: number }[] = [
-  { name: "Fernet Branca", logo: "/assets/brands/branca.png", height: 160 },
   { name: "Campari", logo: "/assets/brands/campari.svg" },
   { name: "Aperol", logo: "/assets/brands/aperol.svg" },
-  { name: "Bombay Sapphire", logo: "/assets/brands/bombay-sapphire.svg" },
   { name: "Absolut Vodka", logo: "/assets/brands/absolut.svg" },
   { name: "Jose Cuervo", logo: "/assets/brands/jose-cuervo.svg" },
   { name: "Heineken", logo: "/assets/brands/heineken.png" },
 ];
 
 const BrandCarousel: FC = () => {
-  const items = [...BRANDS, ...BRANDS];
-  const LOGO_H = 84;
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeftPos = useRef(0);
+
+  const items = [...BRANDS, ...BRANDS, ...BRANDS, ...BRANDS];
+  const LOGO_H = 64;
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    let animId: number;
+    let lastTime: number;
+
+    if (el.scrollLeft === 0) {
+      el.scrollLeft = el.scrollWidth / 4;
+    }
+
+    const scroll = (time: number) => {
+      if (!lastTime) lastTime = time;
+      const dt = time - lastTime;
+      lastTime = time;
+
+      if (!isHovered && !isDragging.current) {
+        el.scrollLeft += dt * 0.045;
+      }
+
+      if (!isDragging.current) {
+        const singleCopyWidth = el.scrollWidth / 4;
+        if (el.scrollLeft >= singleCopyWidth * 3) {
+          el.scrollLeft -= singleCopyWidth;
+        } else if (el.scrollLeft <= singleCopyWidth / 2) {
+          el.scrollLeft += singleCopyWidth;
+        }
+      }
+
+      animId = requestAnimationFrame(scroll);
+    };
+    animId = requestAnimationFrame(scroll);
+    return () => cancelAnimationFrame(animId);
+  }, [isHovered]);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    isDragging.current = true;
+    setIsHovered(true);
+    if (!scrollRef.current) return;
+    startX.current = e.pageX - scrollRef.current.offsetLeft;
+    scrollLeftPos.current = scrollRef.current.scrollLeft;
+  };
+
+  const handleMouseLeave = () => {
+    isDragging.current = false;
+    setIsHovered(false);
+  };
+
+  const handleMouseUp = () => {
+    isDragging.current = false;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX.current) * 2.2;
+    scrollRef.current.scrollLeft = scrollLeftPos.current - walk;
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    isDragging.current = true;
+    setIsHovered(true);
+    if (!scrollRef.current) return;
+    startX.current = e.touches[0].pageX - scrollRef.current.offsetLeft;
+    scrollLeftPos.current = scrollRef.current.scrollLeft;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging.current || !scrollRef.current) return;
+    const x = e.touches[0].pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX.current) * 2.2;
+    scrollRef.current.scrollLeft = scrollLeftPos.current - walk;
+  };
+
   return (
-    <section className="py-20 px-8 md:px-16">
+    <section className="py-20 px-8 md:px-16 overflow-hidden select-none">
       <div className="max-w-6xl mx-auto">
         <FadeIn className="mb-10 text-center">
           <SectionTitle>
@@ -1101,27 +1180,39 @@ const BrandCarousel: FC = () => {
         </FadeIn>
 
         <div
-          className="mt-12 rounded-xl overflow-hidden"
+          className="mt-12 rounded-2xl overflow-hidden"
           style={{
-            background: "#ffffff",
-            border: "1px solid rgba(0,0,0,0.06)",
+            background: "rgba(207, 198, 198, 1)",
+            border: "1px solid rgba(220,220,240,0.18)",
+            backdropFilter: "blur(18px)",
+            WebkitBackdropFilter: "blur(18px)",
+            boxShadow: "0 4px 32px 0 rgba(220,220,240,0.06), inset 0 1px 0 rgba(255,255,255,0.12)",
           }}
         >
-          <div className="overflow-hidden py-6">
-            <div
-              className="flex gap-14 items-center animate-marquee-hover"
-              style={{ animation: "marquee 18s linear infinite" }}
-            >
+          <div
+            className="w-full flex overflow-x-auto hide-scrollbar py-5"
+            ref={scrollRef}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={handleMouseLeave}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleMouseUp}
+            onTouchMove={handleTouchMove}
+            style={{ cursor: isDragging.current ? "grabbing" : isHovered ? "grab" : "default" }}
+          >
+            <div className="flex gap-14 items-center px-6" style={{ width: "max-content" }}>
               {items.map((brand, i) => (
                 <div
                   key={`${brand.name}-${i}`}
-                className="flex items-center justify-center min-w-[180px]"
+                  className="flex items-center justify-center min-w-[180px]"
                 >
                   <img
                     src={brand.logo}
                     alt={brand.name}
-                  className="w-auto object-contain"
-                    style={{ height: brand.height ?? LOGO_H }}
+                    className="w-auto object-contain pointer-events-none"
+                    style={{ height: LOGO_H }}
                   />
                 </div>
               ))}
@@ -1132,6 +1223,7 @@ const BrandCarousel: FC = () => {
     </section>
   );
 };
+
 
 // ─── Experience Strip ─────────────────────────────────────────
 const ExperienceStrip: FC = () => {

@@ -178,7 +178,7 @@ const STATS: StatItem[] = [
 const AMB_CARDS: AmbCard[] = [
   { image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800", tag: "Ambientación", title: "Espacios que cuentan historias", span: "col-span-5" },
   { image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=800", tag: "Barra Móvil", title: "Tragos de autor", span: "col-span-3" },
-  { image: "/assets/electronic_dj.jpg", tag: "Electrónica", title: "Sets únicos", span: "col-span-4" },
+  { image: "/assets/gallery/gallery_7.jpg", tag: "Electrónica", title: "Sets únicos", span: "col-span-4" },
   { image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=800", tag: "Gastronomía", title: "Sabores inolvidables", span: "col-span-4" },
   { image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=800", tag: "Momentos", title: "Noches que no se olvidan", span: "col-span-8" },
 ];

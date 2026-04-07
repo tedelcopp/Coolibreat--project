@@ -1378,12 +1378,15 @@ const GALLERY_IMAGES = [
   "/assets/gallery/gallery_4.jpg",
   "/assets/gallery/gallery_3.jpg",
   "/assets/gallery/gallery_6.jpg",
-  "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=800",
+  "/assets/gallery/gallery_11.jpg",
   "/assets/gallery/gallery_7.jpg",
-  "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800",
-  "/assets/gallery/gallery_2.jpg",
+  "/assets/gallery/gallery_12.jpg",
   "/assets/gallery/gallery_1.jpg",
-  "/assets/gallery/gallery_5.jpg"
+  "/assets/gallery/gallery_2.jpg",
+  "/assets/gallery/gallery_5.jpg",
+  "/assets/gallery/gallery_8.jpg",
+  "/assets/gallery/gallery_13.jpg",
+  "/assets/gallery/gallery_10.jpg"
 ];
 
 const Gallery: FC = () => (

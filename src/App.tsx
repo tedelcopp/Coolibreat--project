@@ -1386,7 +1386,10 @@ const GALLERY_IMAGES = [
   "/assets/gallery/gallery_5.jpg",
   "/assets/gallery/gallery_8.jpg",
   "/assets/gallery/gallery_13.jpg",
-  "/assets/gallery/gallery_10.jpg"
+  "/assets/gallery/gallery_10.jpg",
+  "/assets/gallery/gallery_15.jpg",
+  "/assets/gallery/gallery_16.jpg",
+  "/assets/gallery/gallery_14.jpg"
 ];
 
 const Gallery: FC = () => (

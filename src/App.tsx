@@ -1088,6 +1088,7 @@ const BRANDS: { name: string; logo: string; height?: number }[] = [
 const BrandCarousel: FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const isHoveredRef = useRef(false);
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeftPos = useRef(0);
@@ -1095,43 +1096,72 @@ const BrandCarousel: FC = () => {
   const items = [...BRANDS, ...BRANDS, ...BRANDS, ...BRANDS];
   const LOGO_H = 64;
 
+  const setHover = (v: boolean) => {
+    isHoveredRef.current = v;
+    setIsHovered(v);
+  };
+
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    let animId: number;
-    let lastTime: number;
+    const inner = el.firstElementChild as HTMLElement | null;
+    if (!inner) return;
 
-    if (el.scrollLeft === 0) {
-      el.scrollLeft = el.scrollWidth / 4;
-    }
+    let animId = 0;
+    let lastTime = 0;
+
+    const singleCopyWidth = () => {
+      const sw = inner.scrollWidth;
+      return sw > 0 ? sw / 4 : 0;
+    };
+
+    const wrapScroll = () => {
+      const w = singleCopyWidth();
+      if (w <= 0) return;
+      let s = el.scrollLeft;
+      while (s >= w * 3) s -= w;
+      while (s <= w * 0.5) s += w;
+      el.scrollLeft = s;
+    };
+
+    const ro = new ResizeObserver(() => {
+      const w = singleCopyWidth();
+      if (w <= 0) return;
+      if (el.scrollLeft === 0) el.scrollLeft = w;
+      else wrapScroll();
+    });
+    ro.observe(inner);
 
     const scroll = (time: number) => {
       if (!lastTime) lastTime = time;
-      const dt = time - lastTime;
+      let dt = time - lastTime;
       lastTime = time;
+      if (dt > 64) dt = 64;
 
-      if (!isHovered && !isDragging.current) {
+      if (!isHoveredRef.current && !isDragging.current) {
         el.scrollLeft += dt * 0.045;
       }
 
-      if (!isDragging.current) {
-        const singleCopyWidth = el.scrollWidth / 4;
-        if (el.scrollLeft >= singleCopyWidth * 3) {
-          el.scrollLeft -= singleCopyWidth;
-        } else if (el.scrollLeft <= singleCopyWidth / 2) {
-          el.scrollLeft += singleCopyWidth;
-        }
-      }
+      if (!isDragging.current) wrapScroll();
 
       animId = requestAnimationFrame(scroll);
     };
+
+    requestAnimationFrame(() => {
+      const w = singleCopyWidth();
+      if (w > 0 && el.scrollLeft === 0) el.scrollLeft = w;
+    });
+
     animId = requestAnimationFrame(scroll);
-    return () => cancelAnimationFrame(animId);
-  }, [isHovered]);
+    return () => {
+      cancelAnimationFrame(animId);
+      ro.disconnect();
+    };
+  }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     isDragging.current = true;
-    setIsHovered(true);
+    setHover(true);
     if (!scrollRef.current) return;
     startX.current = e.pageX - scrollRef.current.offsetLeft;
     scrollLeftPos.current = scrollRef.current.scrollLeft;
@@ -1139,7 +1169,7 @@ const BrandCarousel: FC = () => {
 
   const handleMouseLeave = () => {
     isDragging.current = false;
-    setIsHovered(false);
+    setHover(false);
   };
 
   const handleMouseUp = () => {
@@ -1156,7 +1186,7 @@ const BrandCarousel: FC = () => {
 
   const handleTouchStart = (e: React.TouchEvent) => {
     isDragging.current = true;
-    setIsHovered(true);
+    setHover(true);
     if (!scrollRef.current) return;
     startX.current = e.touches[0].pageX - scrollRef.current.offsetLeft;
     scrollLeftPos.current = scrollRef.current.scrollLeft;
@@ -1192,7 +1222,7 @@ const BrandCarousel: FC = () => {
           <div
             className="w-full flex overflow-x-auto hide-scrollbar py-5"
             ref={scrollRef}
-            onMouseEnter={() => setIsHovered(true)}
+            onMouseEnter={() => setHover(true)}
             onMouseLeave={handleMouseLeave}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
@@ -1443,49 +1473,79 @@ const Gallery: FC = () => (
 const Testimonials: FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const isHoveredRef = useRef(false);
 
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeftPos = useRef(0);
 
+  const setHover = (v: boolean) => {
+    isHoveredRef.current = v;
+    setIsHovered(v);
+  };
+
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    let animId: number;
-    let lastTime: number;
+    const inner = el.firstElementChild as HTMLElement | null;
+    if (!inner) return;
 
-    if (el.scrollLeft === 0) {
-      el.scrollLeft = el.scrollWidth / 4;
-    }
+    let animId = 0;
+    let lastTime = 0;
+
+    const singleCopyWidth = () => {
+      const sw = inner.scrollWidth;
+      return sw > 0 ? sw / 4 : 0;
+    };
+
+    const wrapScroll = () => {
+      const w = singleCopyWidth();
+      if (w <= 0) return;
+      let s = el.scrollLeft;
+      while (s >= w * 3) s -= w;
+      while (s <= w * 0.5) s += w;
+      el.scrollLeft = s;
+    };
+
+    const ro = new ResizeObserver(() => {
+      const w = singleCopyWidth();
+      if (w <= 0) return;
+      if (el.scrollLeft === 0) el.scrollLeft = w;
+      else wrapScroll();
+    });
+    ro.observe(inner);
 
     const scroll = (time: number) => {
       if (!lastTime) lastTime = time;
-      const dt = time - lastTime;
+      let dt = time - lastTime;
       lastTime = time;
+      if (dt > 64) dt = 64;
 
-      if (!isHovered && !isDragging.current) {
+      if (!isHoveredRef.current && !isDragging.current) {
         el.scrollLeft += dt * 0.05;
       }
 
-      if (!isDragging.current) {
-        const singleCopyWidth = el.scrollWidth / 4;
-        if (el.scrollLeft >= singleCopyWidth * 3) {
-          el.scrollLeft -= singleCopyWidth;
-        } else if (el.scrollLeft <= singleCopyWidth / 2) {
-          el.scrollLeft += singleCopyWidth;
-        }
-      }
+      if (!isDragging.current) wrapScroll();
 
       animId = requestAnimationFrame(scroll);
     };
+
+    requestAnimationFrame(() => {
+      const w = singleCopyWidth();
+      if (w > 0 && el.scrollLeft === 0) el.scrollLeft = w;
+    });
+
     animId = requestAnimationFrame(scroll);
 
-    return () => cancelAnimationFrame(animId);
-  }, [isHovered]);
+    return () => {
+      cancelAnimationFrame(animId);
+      ro.disconnect();
+    };
+  }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     isDragging.current = true;
-    setIsHovered(true);
+    setHover(true);
     if (!scrollRef.current) return;
     startX.current = e.pageX - scrollRef.current.offsetLeft;
     scrollLeftPos.current = scrollRef.current.scrollLeft;
@@ -1493,7 +1553,7 @@ const Testimonials: FC = () => {
 
   const handleMouseLeave = () => {
     isDragging.current = false;
-    setIsHovered(false);
+    setHover(false);
   };
 
   const handleMouseUp = () => {
@@ -1510,7 +1570,7 @@ const Testimonials: FC = () => {
 
   const handleTouchStart = (e: React.TouchEvent) => {
     isDragging.current = true;
-    setIsHovered(true);
+    setHover(true);
     if (!scrollRef.current) return;
     startX.current = e.touches[0].pageX - scrollRef.current.offsetLeft;
     scrollLeftPos.current = scrollRef.current.scrollLeft;
@@ -1543,7 +1603,7 @@ const Testimonials: FC = () => {
       <div
         className="w-full flex overflow-x-auto hide-scrollbar"
         ref={scrollRef}
-        onMouseEnter={() => setIsHovered(true)}
+        onMouseEnter={() => setHover(true)}
         onMouseLeave={handleMouseLeave}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}

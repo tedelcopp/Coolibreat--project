@@ -62,7 +62,7 @@ const SERVICES: ServiceItem[] = [
     cta: "Ver detalles",
     popupInfo: {
       image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
-      desc: "Reflejamos la identidad de tu marca con una propuesta integral de alta gama:\n\n• CATERING A MEDIDA: Diseñamos un menú exclusivo adaptado a los objetivos de tu empresa.\n• CAFETERÍA DE ESPECIALIDAD: Servicio de baristas con blends seleccionados y pastelería premium.\n• OPCIONES DULCES Y SALADAS: Finger food gourmet ideal para jornadas de capacitación y networking.\n• BARRA SIN ALCOHOL: Amplia variedad de mocktails de autor y jugos naturales prensados.\n• BRINDIS DE HONOR: Cierre exclusivo con cristalería fina para agasajar a clientes y equipo."
+      desc: "Reflejamos la identidad de tu marca con una propuesta integral de alta gama:\n\n• Catering a Medida: Diseñamos un menú exclusivo adaptado a los objetivos de tu empresa.\n• Cafetería De Especialidad: Servicio de baristas con blends seleccionados y pastelería premium.\n• OPCIONES DULCES Y SALADAS: Finger food gourmet ideal para jornadas de capacitación y networking.\n• BARRA SIN ALCOHOL: Amplia variedad de mocktails de autor y jugos naturales prensados.\n• Brindis De Honor: Cierre exclusivo con cristalería fina para agasajar a clientes y equipo."
     }
   },
   {
@@ -983,17 +983,6 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
           ✕
         </button>
 
-        {service.popupInfo?.image && (
-          <div className="w-full aspect-video mb-10 relative rounded-sm overflow-hidden" style={{ border: "1px solid rgba(201,168,76,0.2)" }}>
-            <img
-              src={service.popupInfo.image}
-              alt={service.name}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(26,26,38,1) 0%, transparent 40%)" }} />
-          </div>
-        )}
-
         <SectionLabel text="Detalles del Servicio" centered />
         <h2
           className="text-center font-light leading-[1.1] mb-10"
@@ -1003,6 +992,21 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
         </h2>
 
         <ServicePopupDescription desc={service.popupInfo?.desc || service.description} />
+
+        {service.popupInfo?.image && (
+          <div
+            className="w-full aspect-video mt-10 mb-8 relative rounded-sm overflow-hidden"
+            style={{ border: "1px solid rgba(201,168,76,0.2)" }}
+          >
+            <img
+              src={service.popupInfo.image}
+              alt={service.name}
+              className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        )}
 
         {/* Mobile arrows inside the modal bottom */}
         <div className="flex justify-between mt-8 sm:hidden">

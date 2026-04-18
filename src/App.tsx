@@ -170,7 +170,7 @@ const PROCESS_STEPS: ProcessStep[] = [
 ];
 
 const STATS: StatItem[] = [
-  { value: "+200", label: "Eventos realizados" },
+  { value: "+100", label: "Eventos realizados" },
   { value: "5", label: "Años de experiencia" },
   { value: "100%", label: "Satisfacción" },
 ];
@@ -1392,7 +1392,10 @@ const GALLERY_IMAGES = [
   "/assets/gallery/gallery_14.jpg",
   "/assets/gallery/gallery_19.jpg",
   "/assets/gallery/gallery_17.jpg",
-  "/assets/gallery/gallery_18.jpg"
+  "/assets/gallery/gallery_18.jpg",
+  "/assets/gallery/gallery_21.jpg",
+  "/assets/gallery/gallery_20.jpg",
+  "/assets/gallery/gallery_22.jpg"
 ];
 
 const Gallery: FC = () => (

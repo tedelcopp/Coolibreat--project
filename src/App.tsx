@@ -855,6 +855,76 @@ const DrinksPopup: FC<DrinksPopupProps> = ({ onClose, onNext, onPrev }) => {
 };
 
 // ─── Service Popup ───────────────────────────────────────────
+function parseServicePopupDesc(desc: string) {
+  const introLines: string[] = [];
+  const items: { title: string; detail: string }[] = [];
+  for (const line of desc.split("\n")) {
+    const t = line.trim();
+    if (!t) continue;
+    if (t.startsWith("•")) {
+      const raw = t.replace(/^•\s*/, "");
+      const idx = raw.indexOf(":");
+      if (idx !== -1) {
+        items.push({ title: raw.slice(0, idx).trim(), detail: raw.slice(idx + 1).trim() });
+      } else {
+        items.push({ title: "", detail: raw });
+      }
+    } else {
+      introLines.push(t);
+    }
+  }
+  return { intro: introLines.join(" "), items };
+}
+
+const ServicePopupDescription: FC<{ desc: string }> = ({ desc }) => {
+  const { intro, items } = parseServicePopupDesc(desc);
+  const bodyColor = "rgba(245,240,232,0.6)";
+
+  if (items.length === 0) {
+    return (
+      <p
+        className="text-center max-w-lg mx-auto text-[13px] leading-relaxed mb-16"
+        style={{ color: bodyColor }}
+      >
+        {intro}
+      </p>
+    );
+  }
+
+  return (
+    <>
+      {intro ? (
+        <p
+          className="text-center max-w-lg mx-auto text-[13px] leading-relaxed mb-10"
+          style={{ color: bodyColor }}
+        >
+          {intro}
+        </p>
+      ) : null}
+      <div className="grid md:grid-cols-2 gap-x-8 gap-y-6 mb-16">
+        {items.map((it, i) => (
+          <div
+            key={i}
+            style={{ borderBottom: "1px solid rgba(201,168,76,0.1)", paddingBottom: "1rem" }}
+          >
+            {it.title ? (
+              <h4
+                className="text-lg mb-1"
+                style={{ fontFamily: "'Cormorant Garamond', serif", color: "#c9a84c" }}
+              >
+                {it.title}
+              </h4>
+            ) : null}
+            <p className="text-[13px] leading-relaxed m-0" style={{ color: bodyColor }}>
+              {it.detail}
+            </p>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+};
+
 interface ServicePopupProps {
   service: ServiceItem;
   onClose: () => void;
@@ -899,14 +969,14 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
       )}
 
       <div
-        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto p-10 rounded-sm flex flex-col items-center"
+        className="relative w-full max-w-4xl max-h-[85vh] overflow-y-auto p-10 rounded-sm"
         style={{ background: "#1a1a26", border: "1px solid rgba(201,168,76,0.3)", boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)" }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
           className="absolute top-6 right-6 text-2xl transition-colors duration-300 z-10"
-          style={{ color: "rgba(245,240,232,0.5)", textShadow: "0 2px 4px rgba(0,0,0,0.5)" }}
+          style={{ color: "rgba(245,240,232,0.5)" }}
           onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")}
           onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}
         >
@@ -914,7 +984,7 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
         </button>
 
         {service.popupInfo?.image && (
-          <div className="w-full aspect-video mb-8 relative rounded-sm overflow-hidden" style={{ border: "1px solid rgba(201,168,76,0.2)" }}>
+          <div className="w-full aspect-video mb-10 relative rounded-sm overflow-hidden" style={{ border: "1px solid rgba(201,168,76,0.2)" }}>
             <img
               src={service.popupInfo.image}
               alt={service.name}
@@ -926,18 +996,16 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
 
         <SectionLabel text="Detalles del Servicio" centered />
         <h2
-          className="text-center font-light leading-[1.1] mb-6"
+          className="text-center font-light leading-[1.1] mb-10"
           style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.5rem", color: "#f5f0e8" }}
         >
           {service.name}
         </h2>
 
-        <p className="text-[14px] leading-relaxed text-center mb-8 max-w-lg" style={{ color: "rgba(245,240,232,0.7)" }}>
-          {service.popupInfo?.desc || service.description}
-        </p>
+        <ServicePopupDescription desc={service.popupInfo?.desc || service.description} />
 
         {/* Mobile arrows inside the modal bottom */}
-        <div className="flex justify-between w-full mb-8 sm:hidden px-4">
+        <div className="flex justify-between mt-8 sm:hidden">
           {onPrev && (
             <button onClick={onPrev} className="text-[18px]" style={{ color: "#c9a84c" }}>‹ Anterior</button>
           )}
@@ -946,7 +1014,7 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
           )}
         </div>
 
-        <div className="flex flex-wrap gap-4 justify-center w-full">
+        <div className="mt-8 text-center">
           <PrimaryBtn onClick={onContact}>Cotizá tu evento</PrimaryBtn>
         </div>
       </div>

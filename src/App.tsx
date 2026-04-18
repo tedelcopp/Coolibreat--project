@@ -62,7 +62,7 @@ const SERVICES: ServiceItem[] = [
     cta: "Ver detalles",
     popupInfo: {
       image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
-      desc: "Reflejamos la identidad de tu marca con una propuesta integral de alta gama:\n\n• Catering a Medida: Diseñamos un menú exclusivo adaptado a los objetivos de tu empresa.\n• Cafetería De Especialidad: Servicio de baristas con blends seleccionados y pastelería premium.\n• OPCIONES DULCES Y SALADAS: Finger food gourmet ideal para jornadas de capacitación y networking.\n• BARRA SIN ALCOHOL: Amplia variedad de mocktails de autor y jugos naturales prensados.\n• Brindis De Honor: Cierre exclusivo con cristalería fina para agasajar a clientes y equipo."
+      desc: "Reflejamos la identidad de tu marca con una propuesta integral de alta gama:\n\n• Catering a Medida: Diseñamos un menú exclusivo adaptado a los objetivos de tu empresa.\n• Cafetería De Especialidad: Servicio de baristas con blends seleccionados y pastelería premium.\n• Opciones Dulces y Saladas: Finger food gourmet ideal para jornadas de capacitación y networking.\n• Barra S/n Alcohol: Amplia variedad de mocktails de autor y jugos naturales prensados.\n• Brindis De Honor: Cierre exclusivo con cristalería fina para agasajar a clientes y equipo."
     }
   },
   {

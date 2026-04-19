@@ -925,6 +925,100 @@ const ServicePopupDescription: FC<{ desc: string }> = ({ desc }) => {
   );
 };
 
+type GalleryManifest = {
+  basePath?: string;
+  files?: string[];
+};
+
+const ServicePopupGallery: FC<{ title?: string }> = ({ title = "Galería" }) => {
+  const [urls, setUrls] = useState<string[]>([]);
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await fetch("/assets/corporate-gallery/manifest.json", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = (await res.json()) as GalleryManifest;
+        const basePath = (data.basePath || "/assets/corporate-gallery/").replace(/\/?$/, "/");
+        const files = (data.files || []).filter(Boolean);
+        const nextUrls = files.map((f) => `${basePath}${f}`);
+        if (mounted) setUrls(nextUrls);
+      } catch {
+        // ignore (manifest might not exist yet)
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (idx >= urls.length) setIdx(0);
+  }, [idx, urls.length]);
+
+  if (urls.length === 0) return null;
+
+  const prev = () => setIdx((i) => (i - 1 + urls.length) % urls.length);
+  const next = () => setIdx((i) => (i + 1) % urls.length);
+
+  return (
+    <div className="mt-16">
+      <SectionLabel text={title} centered />
+
+      <div className="mt-6 relative rounded-sm overflow-hidden" style={{ border: "1px solid rgba(201,168,76,0.2)" }}>
+        <div className="w-full aspect-video bg-black/20">
+          <img src={urls[idx]} alt={`${title} ${idx + 1}`} className="w-full h-full object-cover" loading="lazy" decoding="async" />
+        </div>
+
+        {urls.length > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={prev}
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full grid place-items-center transition-colors"
+              style={{ background: "rgba(13,13,15,0.55)", border: "1px solid rgba(201,168,76,0.25)", color: "#c9a84c" }}
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              onClick={next}
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full grid place-items-center transition-colors"
+              style={{ background: "rgba(13,13,15,0.55)", border: "1px solid rgba(201,168,76,0.25)", color: "#c9a84c" }}
+            >
+              ›
+            </button>
+          </>
+        )}
+      </div>
+
+      {urls.length > 1 && (
+        <div className="mt-6 flex gap-3 overflow-x-auto hide-scrollbar py-1">
+          {urls.map((u, i) => (
+            <button
+              key={u}
+              type="button"
+              onClick={() => setIdx(i)}
+              className="shrink-0 rounded-sm overflow-hidden"
+              style={{
+                width: 96,
+                height: 60,
+                border: i === idx ? "1px solid rgba(201,168,76,0.9)" : "1px solid rgba(201,168,76,0.18)",
+                opacity: i === idx ? 1 : 0.75,
+              }}
+              aria-label={`${title} miniatura ${i + 1}`}
+            >
+              <img src={u} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 interface ServicePopupProps {
   service: ServiceItem;
   onClose: () => void;
@@ -938,6 +1032,8 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
   }, []);
+
+  const showCorporateGallery = service.name === "Eventos Corporativos";
 
   return (
     <div
@@ -993,7 +1089,7 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
 
         <ServicePopupDescription desc={service.popupInfo?.desc || service.description} />
 
-        {service.popupInfo?.image && (
+        {!showCorporateGallery && service.popupInfo?.image && (
           <div
             className="w-full aspect-video mt-10 mb-8 relative rounded-sm overflow-hidden"
             style={{ border: "1px solid rgba(201,168,76,0.2)" }}
@@ -1007,6 +1103,8 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
             />
           </div>
         )}
+
+        {showCorporateGallery && <ServicePopupGallery title="Galería" />}
 
         {/* Mobile arrows inside the modal bottom */}
         <div className="flex justify-between mt-8 sm:hidden">

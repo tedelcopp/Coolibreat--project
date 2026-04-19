@@ -2,8 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 
 const projectRoot = process.cwd();
-const galleryDir = path.join(projectRoot, "public", "assets", "gallery");
-const outPath = path.join(galleryDir, "manifest.json");
 
 const IMG_RE = /\.(png|jpe?g|webp|gif|avif|svg)$/i;
 
@@ -11,14 +9,17 @@ function naturalSort(a, b) {
   return a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" });
 }
 
-function main() {
-  if (!fs.existsSync(galleryDir)) {
-    console.warn(`[gallery-manifest] Missing dir: ${galleryDir}`);
-    process.exit(0);
+function writeManifest({ dir, basePath, label }) {
+  const absDir = path.join(projectRoot, dir);
+  const outPath = path.join(absDir, "manifest.json");
+
+  if (!fs.existsSync(absDir)) {
+    console.warn(`[${label}] Missing dir: ${absDir}`);
+    return;
   }
 
   const files = fs
-    .readdirSync(galleryDir, { withFileTypes: true })
+    .readdirSync(absDir, { withFileTypes: true })
     .filter((d) => d.isFile())
     .map((d) => d.name)
     .filter((name) => IMG_RE.test(name))
@@ -27,12 +28,26 @@ function main() {
 
   const manifest = {
     generatedAt: new Date().toISOString(),
-    basePath: "/assets/gallery/",
+    basePath,
     files,
   };
 
   fs.writeFileSync(outPath, JSON.stringify(manifest, null, 2) + "\n", "utf8");
-  console.log(`[gallery-manifest] Wrote ${files.length} files → ${path.relative(projectRoot, outPath)}`);
+  console.log(`[${label}] Wrote ${files.length} files → ${path.relative(projectRoot, outPath)}`);
+}
+
+function main() {
+  writeManifest({
+    dir: path.join("public", "assets", "gallery"),
+    basePath: "/assets/gallery/",
+    label: "gallery-manifest",
+  });
+
+  writeManifest({
+    dir: path.join("public", "assets", "corporate-gallery"),
+    basePath: "/assets/corporate-gallery/",
+    label: "corporate-gallery-manifest",
+  });
 }
 
 main();

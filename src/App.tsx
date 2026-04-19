@@ -930,7 +930,7 @@ type GalleryManifest = {
   files?: string[];
 };
 
-const ServicePopupGallery: FC<{ title?: string }> = ({ title = "Galería" }) => {
+const ServicePopupGallery: FC<{ title?: string; manifestUrl: string; fallbackBasePath: string }> = ({ title = "Galería", manifestUrl, fallbackBasePath }) => {
   const [urls, setUrls] = useState<string[]>([]);
   const [idx, setIdx] = useState(0);
 
@@ -938,10 +938,10 @@ const ServicePopupGallery: FC<{ title?: string }> = ({ title = "Galería" }) => 
     let mounted = true;
     (async () => {
       try {
-        const res = await fetch("/assets/corporate-gallery/manifest.json", { cache: "no-store" });
+        const res = await fetch(manifestUrl, { cache: "no-store" });
         if (!res.ok) return;
         const data = (await res.json()) as GalleryManifest;
-        const basePath = (data.basePath || "/assets/corporate-gallery/").replace(/\/?$/, "/");
+        const basePath = (data.basePath || fallbackBasePath).replace(/\/?$/, "/");
         const files = (data.files || []).filter(Boolean);
         const nextUrls = files.map((f) => `${basePath}${f}`);
         if (mounted) setUrls(nextUrls);
@@ -952,7 +952,7 @@ const ServicePopupGallery: FC<{ title?: string }> = ({ title = "Galería" }) => 
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [fallbackBasePath, manifestUrl]);
 
   useEffect(() => {
     if (idx >= urls.length) setIdx(0);
@@ -1033,7 +1033,18 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
     return () => { document.body.style.overflow = ""; };
   }, []);
 
-  const showCorporateGallery = service.name === "Eventos Corporativos";
+  const galleryConfig =
+    service.name === "Eventos Corporativos"
+      ? { manifestUrl: "/assets/corporate-gallery/manifest.json", basePath: "/assets/corporate-gallery/" }
+      : service.name === "Eventos Sociales"
+        ? { manifestUrl: "/assets/social-gallery/manifest.json", basePath: "/assets/social-gallery/" }
+        : service.name === "Eventos Privados"
+          ? { manifestUrl: "/assets/private-gallery/manifest.json", basePath: "/assets/private-gallery/" }
+          : service.name === "Sets Electrónicos"
+            ? { manifestUrl: "/assets/electronic-gallery/manifest.json", basePath: "/assets/electronic-gallery/" }
+            : null;
+
+  const hasDedicatedGallery = galleryConfig !== null;
 
   return (
     <div
@@ -1089,7 +1100,7 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
 
         <ServicePopupDescription desc={service.popupInfo?.desc || service.description} />
 
-        {!showCorporateGallery && service.popupInfo?.image && (
+        {!hasDedicatedGallery && service.popupInfo?.image && (
           <div
             className="w-full aspect-video mt-10 mb-8 relative rounded-sm overflow-hidden"
             style={{ border: "1px solid rgba(201,168,76,0.2)" }}
@@ -1104,7 +1115,13 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
           </div>
         )}
 
-        {showCorporateGallery && <ServicePopupGallery title="Galería" />}
+        {hasDedicatedGallery && galleryConfig && (
+          <ServicePopupGallery
+            title="Galería"
+            manifestUrl={galleryConfig.manifestUrl}
+            fallbackBasePath={galleryConfig.basePath}
+          />
+        )}
 
         {/* Mobile arrows inside the modal bottom */}
         <div className="flex justify-between mt-8 sm:hidden">

@@ -48,6 +48,24 @@ function main() {
     basePath: "/assets/corporate-gallery/",
     label: "corporate-gallery-manifest",
   });
+
+  writeManifest({
+    dir: path.join("public", "assets", "social-gallery"),
+    basePath: "/assets/social-gallery/",
+    label: "social-gallery-manifest",
+  });
+
+  writeManifest({
+    dir: path.join("public", "assets", "private-gallery"),
+    basePath: "/assets/private-gallery/",
+    label: "private-gallery-manifest",
+  });
+
+  writeManifest({
+    dir: path.join("public", "assets", "electronic-gallery"),
+    basePath: "/assets/electronic-gallery/",
+    label: "electronic-gallery-manifest",
+  });
 }
 
 main();

@@ -388,9 +388,10 @@ const Nav: FC<NavProps> = ({ logoPrimarySrc }) => {
             <img
               src={logoPrimarySrc}
               alt="Coolibreat"
+              width={40}
+              height={40}
               className="absolute inset-0 h-full w-full object-contain"
             />
-
           </div>
           <span
             className="font-light tracking-[0.2em] uppercase"
@@ -518,6 +519,9 @@ const Hero: FC<HeroProps> = ({ logoPrimarySrc }) => {
         src={logoPrimarySrc}
         alt=""
         aria-hidden
+        width={500}
+        height={500}
+        fetchPriority="high"
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         style={{ width: "min(500px,75vw)", opacity: 0.06, filter: "grayscale(1)", animation: "floatBird 8s ease-in-out infinite" }}
       />
@@ -627,6 +631,9 @@ const About: FC<AboutProps> = ({ logoPrimarySrc }) => (
               <img
                 src={logoPrimarySrc}
                 alt="Coolibreat"
+                width={230}
+                height={230}
+                loading="lazy"
                 className="absolute inset-0 w-full h-full object-contain"
                 style={{ opacity: 0.9 }}
               />
@@ -1065,7 +1072,7 @@ const ServicePopupGallery: FC<{ title?: string; manifestUrl: string; fallbackBas
 
       <div className="mt-6 relative rounded-sm overflow-hidden" style={{ border: "1px solid rgba(201,168,76,0.2)" }}>
         <div className="w-full aspect-video bg-black/20">
-          <img src={urls[idx]} alt={`${title} ${idx + 1}`} className="w-full h-full object-cover" loading="lazy" decoding="async" />
+          <img src={urls[idx]} alt={`${title} ${idx + 1}`} width={800} height={450} className="w-full h-full object-cover" loading="lazy" decoding="async" />
         </div>
 
         {urls.length > 1 && (
@@ -1106,7 +1113,7 @@ const ServicePopupGallery: FC<{ title?: string; manifestUrl: string; fallbackBas
               }}
               aria-label={`${title} miniatura ${i + 1}`}
             >
-              <img src={u} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
+              <img src={u} alt="" width={96} height={60} className="w-full h-full object-cover" loading="lazy" decoding="async" />
             </button>
           ))}
         </div>
@@ -1385,7 +1392,7 @@ const BrandCarousel: FC = () => {
   const startX = useRef(0);
   const scrollLeftPos = useRef(0);
 
-  const items = [...BRANDS, ...BRANDS, ...BRANDS, ...BRANDS];
+  const items = [...BRANDS, ...BRANDS, ...BRANDS];
   const LOGO_H = 64;
 
   const setHover = (v: boolean) => {
@@ -1404,7 +1411,7 @@ const BrandCarousel: FC = () => {
 
     const singleCopyWidth = () => {
       const sw = inner.scrollWidth;
-      return sw > 0 ? sw / 4 : 0;
+      return sw > 0 ? sw / 3 : 0;
     };
 
     const wrapScroll = () => {
@@ -1533,6 +1540,9 @@ const BrandCarousel: FC = () => {
                   <img
                     src={brand.logo}
                     alt={brand.name}
+                    width={120}
+                    height={LOGO_H}
+                    loading="lazy"
                     className="w-auto object-contain pointer-events-none"
                     style={{ height: LOGO_H }}
                   />
@@ -1629,6 +1639,10 @@ const AmbianceCard: FC<AmbianceCardProps> = ({ card }) => {
         <img
           src={card.image}
           alt={card.title}
+          width={800}
+          height={450}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover transition-transform duration-700"
           style={{ opacity: 0.6, transform: hovered ? "scale(1.1)" : "scale(1)" }}
         />
@@ -1720,7 +1734,11 @@ const GALLERY_IMAGES = [
   "/assets/gallery/gallery_22.jpg"
 ];
 
-const Gallery: FC = () => (
+const Gallery: FC = () => {
+  const [showAll, setShowAll] = useState(false);
+  const visibleImages = showAll ? GALLERY_IMAGES : GALLERY_IMAGES.slice(0, 6);
+
+  return (
   <section id="galeria" className="py-28 px-8 md:px-16" style={{ background: "#0d0d0f" }}>
     <div className="max-w-6xl mx-auto">
       <FadeIn className="text-center mb-16">
@@ -1735,8 +1753,8 @@ const Gallery: FC = () => (
       </FadeIn>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {GALLERY_IMAGES.map((src, i) => (
-          <FadeIn key={i} delay={i * 0.1}>
+        {visibleImages.map((src, i) => (
+          <FadeIn key={src} delay={i * 0.05}>
             <div
               className="relative overflow-hidden group aspect-[4/5] sm:aspect-square lg:aspect-[4/5] w-full"
               style={{ background: "#1a1a26", border: "1px solid rgba(201,168,76,0.18)" }}
@@ -1744,6 +1762,8 @@ const Gallery: FC = () => (
               <img
                 src={src}
                 alt={`Evento de Coolibreat ${i + 1}`}
+                width={400}
+                height={500}
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -1757,9 +1777,18 @@ const Gallery: FC = () => (
           </FadeIn>
         ))}
       </div>
+
+      {!showAll && GALLERY_IMAGES.length > 6 && (
+        <FadeIn className="text-center mt-12">
+          <OutlineBtn onClick={() => setShowAll(true)}>
+            Ver más fotos ({GALLERY_IMAGES.length - 6} más)
+          </OutlineBtn>
+        </FadeIn>
+      )}
     </div>
   </section>
-);
+  );
+};
 
 // ─── Testimonials ─────────────────────────────────────────────
 const Testimonials: FC = () => {
@@ -1787,7 +1816,7 @@ const Testimonials: FC = () => {
 
     const singleCopyWidth = () => {
       const sw = inner.scrollWidth;
-      return sw > 0 ? sw / 4 : 0;
+      return sw > 0 ? sw / 3 : 0;
     };
 
     const wrapScroll = () => {
@@ -1906,7 +1935,7 @@ const Testimonials: FC = () => {
         style={{ cursor: isDragging.current ? "grabbing" : (isHovered ? "grab" : "default") }}
       >
         <div className="flex gap-5 px-5" style={{ width: "max-content" }}>
-          {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
+          {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
             <div key={`${t.author}-${i}`} className="w-[320px] md:w-[380px] shrink-0">
               <TestimonialCard item={t} />
             </div>
@@ -1979,6 +2008,9 @@ const CtaBanner: FC<CtaBannerProps> = ({ logoPrimarySrc }) => {
         src={logoPrimarySrc}
         alt=""
         aria-hidden
+        width={600}
+        height={600}
+        loading="lazy"
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         style={{ width: 600, opacity: 0.05, filter: "grayscale(1)" }}
       />
@@ -2208,6 +2240,9 @@ const Footer: FC<FooterProps> = ({ logoPrimarySrc }) => {
               <img
                 src={logoPrimarySrc}
                 alt="Coolibreat"
+                width={32}
+                height={32}
+                loading="lazy"
                 className="absolute inset-0 h-full w-full object-contain opacity-70"
               />
             </div>
@@ -2287,7 +2322,7 @@ export default function App() {
         * { margin:0; padding:0; box-sizing:border-box; }
         html { scroll-behavior:smooth; }
         body { background:#0d0d0f; color:#f5f0e8; font-family:'Jost',sans-serif; font-weight:300; overflow-x:hidden; }
-        body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity:0.03; pointer-events:none; z-index:9999; }
+        body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity:0.03; pointer-events:none; z-index:9999; will-change:transform; contain:strict; }
         ::-webkit-scrollbar { width:3px; }
         ::-webkit-scrollbar-track { background:#0d0d0f; }
         ::-webkit-scrollbar-thumb { background:#c9a84c; }

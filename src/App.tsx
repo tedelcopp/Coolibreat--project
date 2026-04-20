@@ -3,7 +3,7 @@
 // Coolibreat
 // ============================================================
 
-import { useState, useEffect, useRef, FC, ReactNode } from "react";
+import { useState, useEffect, useId, useRef, FC, ReactNode } from "react";
 
 // ─── Types ───────────────────────────────────────────────────
 interface ServiceItem {
@@ -210,6 +210,83 @@ function useInView(threshold = 0.15) {
   return { ref, visible };
 }
 
+function useLockBodyScroll(locked: boolean) {
+  useEffect(() => {
+    if (!locked) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [locked]);
+}
+
+function getFocusableElements(container: HTMLElement): HTMLElement[] {
+  const selector =
+    'a[href],button:not([disabled]),textarea:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  return Array.from(container.querySelectorAll<HTMLElement>(selector)).filter(
+    (el) => el.tabIndex !== -1 && el.offsetParent !== null
+  );
+}
+
+function useModalA11y(opts: { open: boolean; onClose: () => void }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const lastActiveRef = useRef<HTMLElement | null>(null);
+  useLockBodyScroll(opts.open);
+
+  useEffect(() => {
+    if (!opts.open) return;
+
+    lastActiveRef.current = document.activeElement as HTMLElement | null;
+
+    const dialog = dialogRef.current;
+    if (dialog) {
+      const focusables = getFocusableElements(dialog);
+      (focusables[0] || dialog).focus();
+    }
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        opts.onClose();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const d = dialogRef.current;
+      if (!d) return;
+      const focusables = getFocusableElements(d);
+      if (focusables.length === 0) {
+        e.preventDefault();
+        d.focus();
+        return;
+      }
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      if (e.shiftKey) {
+        if (!active || active === first || !d.contains(active)) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (!active || active === last || !d.contains(active)) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      lastActiveRef.current?.focus?.();
+      lastActiveRef.current = null;
+    };
+  }, [opts.open, opts.onClose]);
+
+  return { dialogRef };
+}
+
 // ─── Sub-components ──────────────────────────────────────────
 
 interface FadeInProps {
@@ -306,7 +383,7 @@ const Nav: FC<NavProps> = ({ logoPrimarySrc }) => {
         }}
       >
         {/* Logo */}
-        <button onClick={() => scrollTo("inicio")} className="flex items-center gap-3">
+        <button type="button" onClick={() => scrollTo("inicio")} className="flex items-center gap-3" aria-label="Ir al inicio">
           <div className="relative h-10 w-10">
             <img
               src={logoPrimarySrc}
@@ -328,6 +405,7 @@ const Nav: FC<NavProps> = ({ logoPrimarySrc }) => {
           {links.map((l) => (
             <li key={l.id}>
               <button
+                type="button"
                 onClick={() => scrollTo(l.id)}
                 className="relative text-[11px] tracking-[0.22em] uppercase font-normal transition-colors duration-300 group"
                 style={{ color: "rgba(245,240,232,0.6)" }}
@@ -346,6 +424,7 @@ const Nav: FC<NavProps> = ({ logoPrimarySrc }) => {
 
         {/* CTA */}
         <button
+          type="button"
           className="hidden md:block text-[11px] tracking-[0.2em] uppercase font-normal px-6 py-2 transition-all duration-300"
           style={{ border: "1px solid #c9a84c", color: "#c9a84c" }}
           onClick={() => scrollTo("contacto")}
@@ -362,7 +441,13 @@ const Nav: FC<NavProps> = ({ logoPrimarySrc }) => {
         </button>
 
         {/* Hamburger */}
-        <button className="md:hidden flex flex-col gap-[5px] p-1" onClick={() => setOpen(true)}>
+        <button
+          type="button"
+          className="md:hidden flex flex-col gap-[5px] p-1"
+          onClick={() => setOpen(true)}
+          aria-label="Abrir menú"
+          aria-expanded={open}
+        >
           {[0, 1, 2].map((i) => (
             <span key={i} className="block w-6 h-px" style={{ background: "#f5f0e8" }} />
           ))}
@@ -376,14 +461,17 @@ const Nav: FC<NavProps> = ({ logoPrimarySrc }) => {
           style={{ background: "rgba(13,13,15,0.97)", backdropFilter: "blur(20px)" }}
         >
           <button
+            type="button"
             className="absolute top-6 right-8 text-2xl font-thin"
             style={{ color: "#f5f0e8" }}
             onClick={() => setOpen(false)}
+            aria-label="Cerrar menú"
           >
             ✕
           </button>
           {links.map((l) => (
             <button
+              type="button"
               key={l.id}
               onClick={() => scrollTo(l.id)}
               className="font-light tracking-wide transition-colors duration-300"
@@ -683,10 +771,8 @@ interface DrinksPopupProps {
 }
 
 const DrinksPopup: FC<DrinksPopupProps> = ({ onClose, onNext, onPrev }) => {
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
-  }, []);
+  const titleId = useId();
+  const { dialogRef } = useModalA11y({ open: true, onClose });
 
   return (
     <div
@@ -696,6 +782,7 @@ const DrinksPopup: FC<DrinksPopupProps> = ({ onClose, onNext, onPrev }) => {
     >
       {onPrev && (
         <button
+          type="button"
           onClick={(e) => { e.stopPropagation(); onPrev(); }}
           className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 text-5xl p-4 transition-colors z-[110] font-light hidden sm:block"
           style={{ color: "rgba(245,240,232,0.5)" }}
@@ -707,6 +794,7 @@ const DrinksPopup: FC<DrinksPopupProps> = ({ onClose, onNext, onPrev }) => {
       )}
       {onNext && (
         <button
+          type="button"
           onClick={(e) => { e.stopPropagation(); onNext(); }}
           className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 text-5xl p-4 transition-colors z-[110] font-light hidden sm:block"
           style={{ color: "rgba(245,240,232,0.5)" }}
@@ -718,22 +806,30 @@ const DrinksPopup: FC<DrinksPopupProps> = ({ onClose, onNext, onPrev }) => {
       )}
 
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
+        ref={dialogRef}
         className="relative w-full max-w-4xl max-h-[85vh] overflow-y-auto p-10 rounded-sm"
         style={{ background: "#1a1a26", border: "1px solid rgba(201,168,76,0.3)", boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)" }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
+          type="button"
           onClick={onClose}
           className="absolute top-6 right-6 text-2xl transition-colors duration-300 z-10"
           style={{ color: "rgba(245,240,232,0.5)" }}
           onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")}
           onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}
+          aria-label="Cerrar"
         >
           ✕
         </button>
 
         <SectionLabel text="Nuestros Planes" centered />
         <h2
+          id={titleId}
           className="text-center font-light leading-[1.1] mb-10"
           style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.5rem", color: "#f5f0e8" }}
         >
@@ -839,10 +935,10 @@ const DrinksPopup: FC<DrinksPopupProps> = ({ onClose, onNext, onPrev }) => {
         {/* Mobile arrows inside the modal bottom */}
         <div className="flex justify-between mt-8 sm:hidden">
           {onPrev && (
-            <button onClick={onPrev} className="text-[18px]" style={{ color: "#c9a84c" }}>‹ Anterior</button>
+            <button type="button" onClick={onPrev} className="text-[18px]" style={{ color: "#c9a84c" }}>‹ Anterior</button>
           )}
           {onNext && (
-            <button onClick={onNext} className="text-[18px]" style={{ color: "#c9a84c" }}>Siguiente ›</button>
+            <button type="button" onClick={onNext} className="text-[18px]" style={{ color: "#c9a84c" }}>Siguiente ›</button>
           )}
         </div>
 
@@ -1028,10 +1124,8 @@ interface ServicePopupProps {
 }
 
 const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNext, onPrev }) => {
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
-  }, []);
+  const titleId = useId();
+  const { dialogRef } = useModalA11y({ open: true, onClose });
 
   const galleryConfig =
     service.name === "Eventos Corporativos"
@@ -1054,6 +1148,7 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
     >
       {onPrev && (
         <button
+          type="button"
           onClick={(e) => { e.stopPropagation(); onPrev(); }}
           className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 text-5xl p-4 transition-colors z-[110] font-light hidden sm:block"
           style={{ color: "rgba(245,240,232,0.5)" }}
@@ -1065,6 +1160,7 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
       )}
       {onNext && (
         <button
+          type="button"
           onClick={(e) => { e.stopPropagation(); onNext(); }}
           className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 text-5xl p-4 transition-colors z-[110] font-light hidden sm:block"
           style={{ color: "rgba(245,240,232,0.5)" }}
@@ -1076,22 +1172,30 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
       )}
 
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
+        ref={dialogRef}
         className="relative w-full max-w-4xl max-h-[85vh] overflow-y-auto p-10 rounded-sm"
         style={{ background: "#1a1a26", border: "1px solid rgba(201,168,76,0.3)", boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)" }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
+          type="button"
           onClick={onClose}
           className="absolute top-6 right-6 text-2xl transition-colors duration-300 z-10"
           style={{ color: "rgba(245,240,232,0.5)" }}
           onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")}
           onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}
+          aria-label="Cerrar"
         >
           ✕
         </button>
 
         <SectionLabel text="Detalles del Servicio" centered />
         <h2
+          id={titleId}
           className="text-center font-light leading-[1.1] mb-10"
           style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.5rem", color: "#f5f0e8" }}
         >
@@ -1126,10 +1230,10 @@ const ServicePopup: FC<ServicePopupProps> = ({ service, onClose, onContact, onNe
         {/* Mobile arrows inside the modal bottom */}
         <div className="flex justify-between mt-8 sm:hidden">
           {onPrev && (
-            <button onClick={onPrev} className="text-[18px]" style={{ color: "#c9a84c" }}>‹ Anterior</button>
+            <button type="button" onClick={onPrev} className="text-[18px]" style={{ color: "#c9a84c" }}>‹ Anterior</button>
           )}
           {onNext && (
-            <button onClick={onNext} className="text-[18px]" style={{ color: "#c9a84c" }}>Siguiente ›</button>
+            <button type="button" onClick={onNext} className="text-[18px]" style={{ color: "#c9a84c" }}>Siguiente ›</button>
           )}
         </div>
 
@@ -1252,6 +1356,7 @@ const ServiceCard: FC<ServiceCardProps> = ({ service, onCta }) => {
         {service.description}
       </p>
       <button
+        type="button"
         onClick={onCta}
         className="text-[11px] tracking-[0.22em] uppercase font-normal flex items-center gap-2 transition-all duration-300"
         style={{ color: "#c9a84c" }}
@@ -1906,6 +2011,14 @@ const EMAILJS_TEMPLATE_ID = "template_4fgtfgj";
 const EMAILJS_PUBLIC_KEY = "LbUJ2NNvj98WobDek";
 
 const Contact: FC = () => {
+  const nameId = useId();
+  const emailId = useId();
+  const phoneId = useId();
+  const typeId = useId();
+  const dateId = useId();
+  const guestsId = useId();
+  const messageId = useId();
+
   const [form, setForm] = useState({
     name: "", email: "", phone: "", type: "", date: "", guests: "", message: "",
   });
@@ -1915,9 +2028,10 @@ const Contact: FC = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
     if (!form.name || !form.email || !form.message) {
-      alert("Por favor completá al menos tu nombre, email y mensaje.");
+      setStatus("error");
       return;
     }
     setStatus("loading");
@@ -1960,8 +2074,8 @@ const Contact: FC = () => {
     width: "100%",
   };
 
-  const Label: FC<{ children: ReactNode }> = ({ children }) => (
-    <label className="block text-[10px] tracking-[0.25em] uppercase mb-2" style={{ color: "rgba(245,240,232,0.4)" }}>
+  const Label: FC<{ htmlFor: string; children: ReactNode }> = ({ htmlFor, children }) => (
+    <label htmlFor={htmlFor} className="block text-[10px] tracking-[0.25em] uppercase mb-2" style={{ color: "rgba(245,240,232,0.4)" }}>
       {children}
     </label>
   );
@@ -1993,70 +2107,76 @@ const Contact: FC = () => {
           ))}
         </FadeIn>
 
-        <FadeIn delay={0.15} className="flex flex-col gap-5">
-          <div>
-            <Label>Nombre completo</Label>
-            <input name="name" value={form.name} onChange={handleChange} placeholder="Tu nombre" style={inputStyle} />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
+        <FadeIn delay={0.15}>
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
             <div>
-              <Label>Email</Label>
-              <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="tu@email.com" style={inputStyle} />
+              <Label htmlFor={nameId}>Nombre completo</Label>
+              <input id={nameId} name="name" autoComplete="name" value={form.name} onChange={handleChange} placeholder="Tu nombre" style={inputStyle} required />
             </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor={emailId}>Email</Label>
+                <input id={emailId} name="email" type="email" autoComplete="email" value={form.email} onChange={handleChange} placeholder="tu@email.com" style={inputStyle} required />
+              </div>
+              <div>
+                <Label htmlFor={phoneId}>Teléfono</Label>
+                <input id={phoneId} name="phone" type="tel" autoComplete="tel" value={form.phone} onChange={handleChange} placeholder="+54 9 11..." style={inputStyle} />
+              </div>
+            </div>
+
             <div>
-              <Label>Teléfono</Label>
-              <input name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+54 9 11..." style={inputStyle} />
+              <Label htmlFor={typeId}>Tipo de evento</Label>
+              <select id={typeId} name="type" value={form.type} onChange={handleChange} style={{ ...inputStyle, backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a84c' stroke-width='1.5' fill='none'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 1rem center", appearance: "none", cursor: "pointer" }}>
+                <option value="">Seleccioná el tipo</option>
+                {["Evento Social", "Evento Corporativo", "Barra Móvil", "Set Electrónico / DJ", "Evento Privado", "Producción Integral", "Combinación de servicios"].map((o) => (
+                  <option key={o} value={o}>{o}</option>
+                ))}
+              </select>
             </div>
-          </div>
 
-          <div>
-            <Label>Tipo de evento</Label>
-            <select name="type" value={form.type} onChange={handleChange} style={{ ...inputStyle, backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a84c' stroke-width='1.5' fill='none'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 1rem center", appearance: "none", cursor: "pointer" }}>
-              <option value="" disabled>Seleccioná el tipo</option>
-              {["Evento Social", "Evento Corporativo", "Barra Móvil", "Set Electrónico / DJ", "Evento Privado", "Producción Integral", "Combinación de servicios"].map((o) => (
-                <option key={o} value={o}>{o}</option>
-              ))}
-            </select>
-          </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor={dateId}>Fecha del evento</Label>
+                <input id={dateId} name="date" type="date" value={form.date} onChange={handleChange} style={inputStyle} />
+              </div>
+              <div>
+                <Label htmlFor={guestsId}>Cantidad de personas</Label>
+                <input id={guestsId} name="guests" type="number" value={form.guests} onChange={handleChange} placeholder="Estimado" style={inputStyle} min={0} inputMode="numeric" />
+              </div>
+            </div>
 
-          <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Fecha del evento</Label>
-              <input name="date" type="date" value={form.date} onChange={handleChange} style={inputStyle} />
+              <Label htmlFor={messageId}>Contanos tu idea</Label>
+              <textarea
+                id={messageId}
+                name="message"
+                value={form.message}
+                onChange={handleChange}
+                placeholder="Describí lo que tenés en mente, el estilo que buscás, el lugar si ya lo tenés..."
+                rows={5}
+                style={{ ...inputStyle, resize: "vertical" }}
+                required
+              />
             </div>
-            <div>
-              <Label>Cantidad de personas</Label>
-              <input name="guests" type="number" value={form.guests} onChange={handleChange} placeholder="Estimado" style={inputStyle} />
+
+            <PrimaryBtn type="submit" fullWidth>
+              {status === "loading" ? "Enviando..." : "Enviar consulta"}
+            </PrimaryBtn>
+
+            <div aria-live="polite">
+              {status === "success" && (
+                <p className="text-sm text-center mt-2" style={{ color: "#c9a84c", letterSpacing: "0.05em" }}>
+                  ✦ ¡Mensaje enviado! Te contactamos en menos de 24hs.
+                </p>
+              )}
+              {status === "error" && (
+                <p className="text-sm text-center mt-2" style={{ color: "#e07070", letterSpacing: "0.05em" }}>
+                  Revisá los campos obligatorios (nombre, email y mensaje) o intentá de nuevo. También podés escribirnos por WhatsApp.
+                </p>
+              )}
             </div>
-          </div>
-
-          <div>
-            <Label>Contanos tu idea</Label>
-            <textarea
-              name="message"
-              value={form.message}
-              onChange={handleChange}
-              placeholder="Describí lo que tenés en mente, el estilo que buscás, el lugar si ya lo tenés..."
-              rows={5}
-              style={{ ...inputStyle, resize: "vertical" }}
-            />
-          </div>
-
-          <PrimaryBtn onClick={handleSubmit} fullWidth>
-            {status === "loading" ? "Enviando..." : "Enviar consulta"}
-          </PrimaryBtn>
-
-          {status === "success" && (
-            <p className="text-sm text-center mt-2" style={{ color: "#c9a84c", letterSpacing: "0.05em" }}>
-              ✦ ¡Mensaje enviado! Te contactamos en menos de 24hs.
-            </p>
-          )}
-          {status === "error" && (
-            <p className="text-sm text-center mt-2" style={{ color: "#e07070", letterSpacing: "0.05em" }}>
-              Hubo un error al enviar. Intentá de nuevo o escribinos por WhatsApp.
-            </p>
-          )}
+          </form>
         </FadeIn>
       </div>
     </section>
@@ -2083,7 +2203,7 @@ const Footer: FC<FooterProps> = ({ logoPrimarySrc }) => {
     <footer className="py-10 px-8 md:px-16" style={{ background: "#13131a", borderTop: "1px solid rgba(201,168,76,0.18)" }}>
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center gap-8 text-center md:text-left">
         <div className="flex flex-col items-center md:items-start gap-2 justify-self-center md:justify-self-start">
-          <button onClick={() => scrollTo("inicio")} className="flex items-center gap-3 w-max">
+          <button type="button" onClick={() => scrollTo("inicio")} className="flex items-center gap-3 w-max" aria-label="Ir al inicio">
             <div className="relative h-8 w-8">
               <img
                 src={logoPrimarySrc}
@@ -2104,6 +2224,7 @@ const Footer: FC<FooterProps> = ({ logoPrimarySrc }) => {
           {links.map((l) => (
             <li key={l.id}>
               <button
+                type="button"
                 onClick={() => scrollTo(l.id)}
                 className="text-[11px] tracking-[0.15em] uppercase transition-colors duration-300 whitespace-nowrap"
                 style={{ color: "rgba(245,240,232,0.4)" }}
@@ -2157,7 +2278,6 @@ export default function App() {
     <>
       {/* Global keyframes injected once */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap');
         @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
         @keyframes floatBird { 0%,100% { transform:translate(-50%,-50%) rotate(-2deg); } 50% { transform:translate(-50%,-54%) rotate(2deg); } }
         @keyframes rotateSlow { to { transform:rotate(360deg); } }

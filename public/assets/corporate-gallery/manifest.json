@@ -1,8 +1,12 @@
 {
-  "generatedAt": "2026-04-19T15:32:20.976Z",
+  "generatedAt": "2026-04-20T14:39:21.694Z",
   "basePath": "/assets/corporate-gallery/",
   "files": [
+    "corporate_gallery_1_thumb.webp",
     "corporate_gallery_1.jpg",
-    "corporate_gallery_2.jpg"
+    "corporate_gallery_1.webp",
+    "corporate_gallery_2_thumb.webp",
+    "corporate_gallery_2.jpg",
+    "corporate_gallery_2.webp"
   ]
 }

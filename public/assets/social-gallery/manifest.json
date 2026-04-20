@@ -1,8 +1,12 @@
 {
-  "generatedAt": "2026-04-19T15:32:20.977Z",
+  "generatedAt": "2026-04-20T14:39:21.695Z",
   "basePath": "/assets/social-gallery/",
   "files": [
+    "social_gallery_1_thumb.webp",
     "social_gallery_1.jpg",
-    "social_gallery_2.jpg"
+    "social_gallery_1.webp",
+    "social_gallery_2_thumb.webp",
+    "social_gallery_2.jpg",
+    "social_gallery_2.webp"
   ]
 }

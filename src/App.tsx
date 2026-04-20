@@ -1980,7 +1980,7 @@ const Contact: FC = () => {
 
           {[
             { label: "Instagram", content: <a href="https://instagram.com/coolibreat" target="_blank" rel="noreferrer" className="transition-colors duration-300" style={{ color: "rgba(245,240,232,0.5)" }} onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")} onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}>@coolibreat</a> },
-            { label: "Email", content: <a href="mailto:hola@coolibreat.com" className="transition-colors duration-300" style={{ color: "rgba(245,240,232,0.5)" }} onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")} onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}>hola@coolibreat.com</a> },
+            { label: "Email", content: <a href="mailto:coolibreat.contacto@coolibreat.com" className="transition-colors duration-300" style={{ color: "rgba(245,240,232,0.5)" }} onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")} onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}>coolibreat.contacto@gmail.com</a> },
             { label: "Zona de cobertura", content: <span style={{ color: "rgba(245,240,232,0.5)" }}>Chubut - Patagonia Argentina</span> },
             { label: "WhatsApp", content: <a href="https://wa.me/5492945689890" target="_blank" rel="noreferrer" className="transition-colors duration-300" style={{ color: "rgba(245,240,232,0.5)" }} onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")} onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.5)")}>Escribinos por WhatsApp</a> },
           ].map((item) => (

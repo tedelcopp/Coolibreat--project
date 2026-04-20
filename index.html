@@ -183,17 +183,19 @@
   <!-- ============================================ -->
   <!-- Preconnect para performance -->
   <!-- ============================================ -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com/">
   <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  
+  <!-- Preload recursos críticos -->
   <link rel="preload" as="style" fetchpriority="high"
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap"
-    onload="this.onload=null;this.rel='stylesheet'">
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap">
+  <link rel="preload" as="image" href="/assets/logos/logo1.png" fetchpriority="high">
+  
   <noscript>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap">
   </noscript>
-
-  <!-- Preload LCP image -->
-  <link rel="preload" as="image" href="/assets/logos/logo1.png" fetchpriority="high">
 
 </head>
 

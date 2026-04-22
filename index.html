@@ -188,10 +188,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com/">
   <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
   
-  <!-- Preload recursos críticos -->
+  <!-- Preload recursos críticos con fetchpriority -->
+  <link rel="preload" as="image" href="/assets/logos/logo1.png" fetchpriority="high">
+  
+  <!-- Google Fonts con display=swap para evitar bloqueo de renderización -->
   <link rel="preload" as="style" fetchpriority="high"
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap">
-  <link rel="preload" as="image" href="/assets/logos/logo1.png" fetchpriority="high">
+  <link rel="stylesheet" media="print" onload="this.onload=null;this.media='all'"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap">
   
   <noscript>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap">

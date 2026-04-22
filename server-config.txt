@@ -1,0 +1,50 @@
+# Configuración de servidor para optimización de rendimiento
+# Colocar en la raíz del servidor web
+
+# Para Apache (.htaccess)
+<IfModule mod_headers.c>
+  # Cache de recursos estáticos por 30 días
+  <FilesMatch "\.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot|webp)$">
+    Header set Cache-Control "max-age=2592000, public"
+    Header set ETag "W/\"2592000\""
+  </FilesMatch>
+
+  # Cache de HTML por 1 día (o menos para cambios rápidos)
+  <FilesMatch "\.html?$">
+    Header set Cache-Control "max-age=86400, public, must-revalidate"
+  </FilesMatch>
+
+  # Permitir compresión GZIP
+  <IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json application/xml+rss application/atom+xml image/svg+xml
+  </IfModule>
+
+  # Preload headers para recursos críticos (informar al navegador)
+  Header set Link "</assets/logos/logo1.png>; rel=preload; as=image; fetchpriority=high" env=!dont_vary
+  Header set Link "</assets/index-*.js>; rel=preload; as=script; fetchpriority=high" env=!dont_vary
+</IfModule>
+
+# Para NGINX (añadir a la sección server{})
+# server {
+#   # Cache de recursos estáticos
+#   location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|webp)$ {
+#     expires 30d;
+#     add_header Cache-Control "public, immutable";
+#   }
+#
+#   # Cache de HTML
+#   location ~* \.html?$ {
+#     expires 1d;
+#     add_header Cache-Control "public, must-revalidate";
+#   }
+#
+#   # Compresión GZIP
+#   gzip on;
+#   gzip_types text/html text/plain text/css text/javascript application/javascript application/json application/xml+rss application/atom+xml image/svg+xml;
+#   gzip_min_length 1024;
+#
+#   # Rewrite para SPA
+#   location / {
+#     try_files $uri $uri/ /index.html;
+#   }
+# }

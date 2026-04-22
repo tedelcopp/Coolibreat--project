@@ -12,8 +12,8 @@ export default defineConfig({
         drop_console: true,
       }
     },
-    // Mantener CSS separado pero optimizado
-    cssCodeSplit: true,
+    // Inyectar CSS en HTML para eliminar una solicitud de red crítica
+    cssCodeSplit: false,
     // Estrategia de chunking mejorada
     rollupOptions: {
       output: {

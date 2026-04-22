@@ -1387,12 +1387,15 @@ const BRANDS: { name: string; logo: string; height?: number }[] = [
 ];
 
 const BrandCarousel: FC = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const isHoveredRef = useRef(false);
   const isDragging = useRef(false);
   const startX = useRef(0);
-  const scrollLeftPos = useRef(0);
+  const currentPos = useRef(0);
+  const startPos = useRef(0);
+  const copyWidth = useRef(0);
 
   const items = [...BRANDS, ...BRANDS, ...BRANDS];
   const LOGO_H = 64;
@@ -1403,35 +1406,23 @@ const BrandCarousel: FC = () => {
   };
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const inner = el.firstElementChild as HTMLElement | null;
+    const inner = innerRef.current;
     if (!inner) return;
 
     let animId = 0;
     let lastTime = 0;
 
-    const singleCopyWidth = () => {
+    const updateWidth = () => {
       const sw = inner.scrollWidth;
-      return sw > 0 ? sw / 3 : 0;
+      copyWidth.current = sw > 0 ? sw / 3 : 0;
+      if (currentPos.current === 0) {
+        currentPos.current = -copyWidth.current;
+      }
     };
 
-    const wrapScroll = () => {
-      const w = singleCopyWidth();
-      if (w <= 0) return;
-      let s = el.scrollLeft;
-      while (s >= w * 3) s -= w;
-      while (s <= w * 0.5) s += w;
-      el.scrollLeft = s;
-    };
-
-    const ro = new ResizeObserver(() => {
-      const w = singleCopyWidth();
-      if (w <= 0) return;
-      if (el.scrollLeft === 0) el.scrollLeft = w;
-      else wrapScroll();
-    });
+    const ro = new ResizeObserver(updateWidth);
     ro.observe(inner);
+    updateWidth();
 
     const scroll = (time: number) => {
       if (!lastTime) lastTime = time;
@@ -1440,18 +1431,22 @@ const BrandCarousel: FC = () => {
       if (dt > 64) dt = 64;
 
       if (!isHoveredRef.current && !isDragging.current) {
-        el.scrollLeft += dt * 0.045;
+        currentPos.current -= dt * 0.045;
       }
 
-      if (!isDragging.current) wrapScroll();
+      // Wrap
+      const w = copyWidth.current;
+      if (w > 0) {
+        if (currentPos.current <= -w * 2) currentPos.current += w;
+        if (currentPos.current >= 0) currentPos.current -= w;
+      }
+
+      if (inner) {
+        inner.style.transform = `translate3d(${currentPos.current}px, 0, 0)`;
+      }
 
       animId = requestAnimationFrame(scroll);
     };
-
-    requestAnimationFrame(() => {
-      const w = singleCopyWidth();
-      if (w > 0 && el.scrollLeft === 0) el.scrollLeft = w;
-    });
 
     animId = requestAnimationFrame(scroll);
     return () => {
@@ -1463,9 +1458,8 @@ const BrandCarousel: FC = () => {
   const handleMouseDown = (e: React.MouseEvent) => {
     isDragging.current = true;
     setHover(true);
-    if (!scrollRef.current) return;
-    startX.current = e.pageX - scrollRef.current.offsetLeft;
-    scrollLeftPos.current = scrollRef.current.scrollLeft;
+    startX.current = e.pageX;
+    startPos.current = currentPos.current;
   };
 
   const handleMouseLeave = () => {
@@ -1478,26 +1472,24 @@ const BrandCarousel: FC = () => {
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging.current || !scrollRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX.current) * 2.2;
-    scrollRef.current.scrollLeft = scrollLeftPos.current - walk;
+    if (!isDragging.current) return;
+    const x = e.pageX;
+    const walk = (x - startX.current) * 1.5;
+    currentPos.current = startPos.current + walk;
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
     isDragging.current = true;
     setHover(true);
-    if (!scrollRef.current) return;
-    startX.current = e.touches[0].pageX - scrollRef.current.offsetLeft;
-    scrollLeftPos.current = scrollRef.current.scrollLeft;
+    startX.current = e.touches[0].pageX;
+    startPos.current = currentPos.current;
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging.current || !scrollRef.current) return;
-    const x = e.touches[0].pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX.current) * 2.2;
-    scrollRef.current.scrollLeft = scrollLeftPos.current - walk;
+    if (!isDragging.current) return;
+    const x = e.touches[0].pageX;
+    const walk = (x - startX.current) * 1.5;
+    currentPos.current = startPos.current + walk;
   };
 
   return (
@@ -1521,8 +1513,8 @@ const BrandCarousel: FC = () => {
           }}
         >
           <div
-            className="w-full flex overflow-x-auto hide-scrollbar py-5"
-            ref={scrollRef}
+            className="w-full flex overflow-x-hidden hide-scrollbar py-5"
+            ref={containerRef}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={handleMouseLeave}
             onMouseDown={handleMouseDown}
@@ -1533,7 +1525,11 @@ const BrandCarousel: FC = () => {
             onTouchMove={handleTouchMove}
             style={{ cursor: isDragging.current ? "grabbing" : isHovered ? "grab" : "default" }}
           >
-            <div className="flex gap-14 items-center px-6" style={{ width: "max-content" }}>
+            <div 
+              className="flex gap-14 items-center px-6 will-change-transform" 
+              ref={innerRef}
+              style={{ width: "max-content" }}
+            >
               {items.map((brand, i) => (
                 <div
                   key={`${brand.name}-${i}`}
@@ -1794,13 +1790,15 @@ const Gallery: FC = () => {
 
 // ─── Testimonials ─────────────────────────────────────────────
 const Testimonials: FC = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const isHoveredRef = useRef(false);
-
   const isDragging = useRef(false);
   const startX = useRef(0);
-  const scrollLeftPos = useRef(0);
+  const currentPos = useRef(0);
+  const startPos = useRef(0);
+  const copyWidth = useRef(0);
 
   const setHover = (v: boolean) => {
     isHoveredRef.current = v;
@@ -1808,35 +1806,23 @@ const Testimonials: FC = () => {
   };
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const inner = el.firstElementChild as HTMLElement | null;
+    const inner = innerRef.current;
     if (!inner) return;
 
     let animId = 0;
     let lastTime = 0;
 
-    const singleCopyWidth = () => {
+    const updateWidth = () => {
       const sw = inner.scrollWidth;
-      return sw > 0 ? sw / 3 : 0;
+      copyWidth.current = sw > 0 ? sw / 3 : 0;
+      if (currentPos.current === 0) {
+        currentPos.current = -copyWidth.current;
+      }
     };
 
-    const wrapScroll = () => {
-      const w = singleCopyWidth();
-      if (w <= 0) return;
-      let s = el.scrollLeft;
-      while (s >= w * 3) s -= w;
-      while (s <= w * 0.5) s += w;
-      el.scrollLeft = s;
-    };
-
-    const ro = new ResizeObserver(() => {
-      const w = singleCopyWidth();
-      if (w <= 0) return;
-      if (el.scrollLeft === 0) el.scrollLeft = w;
-      else wrapScroll();
-    });
+    const ro = new ResizeObserver(updateWidth);
     ro.observe(inner);
+    updateWidth();
 
     const scroll = (time: number) => {
       if (!lastTime) lastTime = time;
@@ -1845,18 +1831,22 @@ const Testimonials: FC = () => {
       if (dt > 64) dt = 64;
 
       if (!isHoveredRef.current && !isDragging.current) {
-        el.scrollLeft += dt * 0.05;
+        currentPos.current -= dt * 0.05;
       }
 
-      if (!isDragging.current) wrapScroll();
+      // Wrap
+      const w = copyWidth.current;
+      if (w > 0) {
+        if (currentPos.current <= -w * 2) currentPos.current += w;
+        if (currentPos.current >= 0) currentPos.current -= w;
+      }
+
+      if (inner) {
+        inner.style.transform = `translate3d(${currentPos.current}px, 0, 0)`;
+      }
 
       animId = requestAnimationFrame(scroll);
     };
-
-    requestAnimationFrame(() => {
-      const w = singleCopyWidth();
-      if (w > 0 && el.scrollLeft === 0) el.scrollLeft = w;
-    });
 
     animId = requestAnimationFrame(scroll);
 
@@ -1869,9 +1859,8 @@ const Testimonials: FC = () => {
   const handleMouseDown = (e: React.MouseEvent) => {
     isDragging.current = true;
     setHover(true);
-    if (!scrollRef.current) return;
-    startX.current = e.pageX - scrollRef.current.offsetLeft;
-    scrollLeftPos.current = scrollRef.current.scrollLeft;
+    startX.current = e.pageX;
+    startPos.current = currentPos.current;
   };
 
   const handleMouseLeave = () => {
@@ -1884,26 +1873,24 @@ const Testimonials: FC = () => {
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging.current || !scrollRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - scrollRef.current.offsetLeft;
+    if (!isDragging.current) return;
+    const x = e.pageX;
     const walk = (x - startX.current) * 1.5;
-    scrollRef.current.scrollLeft = scrollLeftPos.current - walk;
+    currentPos.current = startPos.current + walk;
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
     isDragging.current = true;
     setHover(true);
-    if (!scrollRef.current) return;
-    startX.current = e.touches[0].pageX - scrollRef.current.offsetLeft;
-    scrollLeftPos.current = scrollRef.current.scrollLeft;
+    startX.current = e.touches[0].pageX;
+    startPos.current = currentPos.current;
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging.current || !scrollRef.current) return;
-    const x = e.touches[0].pageX - scrollRef.current.offsetLeft;
+    if (!isDragging.current) return;
+    const x = e.touches[0].pageX;
     const walk = (x - startX.current) * 1.5;
-    scrollRef.current.scrollLeft = scrollLeftPos.current - walk;
+    currentPos.current = startPos.current + walk;
   };
 
   return (
@@ -1924,8 +1911,8 @@ const Testimonials: FC = () => {
       `}</style>
 
       <div
-        className="w-full flex overflow-x-auto hide-scrollbar"
-        ref={scrollRef}
+        className="w-full flex overflow-x-hidden hide-scrollbar"
+        ref={containerRef}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={handleMouseLeave}
         onMouseDown={handleMouseDown}
@@ -1936,7 +1923,11 @@ const Testimonials: FC = () => {
         onTouchMove={handleTouchMove}
         style={{ cursor: isDragging.current ? "grabbing" : (isHovered ? "grab" : "default") }}
       >
-        <div className="flex gap-5 px-5" style={{ width: "max-content" }}>
+        <div 
+          className="flex gap-5 px-5 will-change-transform" 
+          ref={innerRef}
+          style={{ width: "max-content" }}
+        >
           {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
             <div key={`${t.author}-${i}`} className="w-[320px] md:w-[380px] shrink-0">
               <TestimonialCard item={t} />

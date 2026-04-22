@@ -387,7 +387,8 @@ const Nav: FC<NavProps> = ({ logoPrimarySrc }) => {
           <div className="relative h-10 w-10">
             <img
               src={logoPrimarySrc}
-              alt="Coolibreat"
+              alt=""
+              aria-hidden="true"
               width={40}
               height={40}
               className="absolute inset-0 h-full w-full object-contain"
@@ -630,7 +631,8 @@ const About: FC<AboutProps> = ({ logoPrimarySrc }) => (
             <div className="relative" style={{ width: "64%", height: "64%" }}>
               <img
                 src={logoPrimarySrc}
-                alt="Coolibreat"
+                alt=""
+                aria-hidden="true"
                 width={230}
                 height={230}
                 loading="lazy"
@@ -670,7 +672,7 @@ const About: FC<AboutProps> = ({ logoPrimarySrc }) => (
               </span>
               <span
                 className="block mt-1 text-[10px] tracking-widest uppercase"
-                style={{ color: "rgba(245,240,232,0.4)" }}
+                style={{ color: "rgba(245,240,232,0.7)" }}
               >
                 {s.label}
               </span>
@@ -847,7 +849,7 @@ const DrinksPopup: FC<DrinksPopupProps> = ({ onClose, onNext, onPrev }) => {
           {BAR_TIERS.map(tier => (
             <div key={tier.name} className="p-7 rounded-sm flex flex-col h-full transition-transform duration-300 hover:-translate-y-1" style={{ background: "rgba(201,168,76,0.03)", border: "1px solid rgba(201,168,76,0.18)" }}>
               <h3 className="text-2xl mb-1 text-center font-light" style={{ fontFamily: "'Cormorant Garamond', serif", color: "#c9a84c" }}>{tier.name}</h3>
-              <p className="text-[10px] tracking-widest mb-7 text-center uppercase" style={{ color: "rgba(245,240,232,0.4)" }}>{tier.subtitle}</p>
+              <p className="text-[10px] tracking-widest mb-7 text-center uppercase" style={{ color: "rgba(245,240,232,0.7)" }}>{tier.subtitle}</p>
               <ul className="text-[13px] leading-loose text-left flex-1" style={{ color: "rgba(245,240,232,0.7)" }}>
                 {tier.features.map((f, i) => (
                   <li key={i} className="mb-3 flex items-start gap-4">
@@ -1977,7 +1979,7 @@ const TestimonialCard: FC<TestimonialCardProps> = ({ item }) => {
       <p className="text-[11px] tracking-[0.2em] uppercase font-normal" style={{ color: "#c9a84c" }}>
         {item.author}
       </p>
-      <p className="text-[11px] mt-1" style={{ color: "rgba(245,240,232,0.35)" }}>
+      <p className="text-[11px] mt-1" style={{ color: "rgba(245,240,232,0.7)" }}>
         {item.role}
       </p>
     </div>
@@ -2107,7 +2109,7 @@ const Contact: FC = () => {
   };
 
   const Label: FC<{ htmlFor: string; children: ReactNode }> = ({ htmlFor, children }) => (
-    <label htmlFor={htmlFor} className="block text-[10px] tracking-[0.25em] uppercase mb-2" style={{ color: "rgba(245,240,232,0.4)" }}>
+    <label htmlFor={htmlFor} className="block text-[10px] tracking-[0.25em] uppercase mb-2" style={{ color: "rgba(245,240,232,0.7)" }}>
       {children}
     </label>
   );
@@ -2239,7 +2241,8 @@ const Footer: FC<FooterProps> = ({ logoPrimarySrc }) => {
             <div className="relative h-8 w-8">
               <img
                 src={logoPrimarySrc}
-                alt="Coolibreat"
+                alt=""
+                aria-hidden="true"
                 width={32}
                 height={32}
                 loading="lazy"
@@ -2250,7 +2253,7 @@ const Footer: FC<FooterProps> = ({ logoPrimarySrc }) => {
               Coolibreat
             </span>
           </button>
-          <p className="text-[11px] tracking-wide" style={{ color: "rgba(245,240,232,0.22)" }}>
+          <p className="text-[11px] tracking-wide" style={{ color: "rgba(245,240,232,0.65)" }}>
             © 2026 Coolibreat. Todos los derechos reservados.
           </p>
         </div>
@@ -2262,9 +2265,9 @@ const Footer: FC<FooterProps> = ({ logoPrimarySrc }) => {
                 type="button"
                 onClick={() => scrollTo(l.id)}
                 className="text-[11px] tracking-[0.15em] uppercase transition-colors duration-300 whitespace-nowrap"
-                style={{ color: "rgba(245,240,232,0.4)" }}
+                style={{ color: "rgba(245,240,232,0.65)" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = "#c9a84c")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.4)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.65)")}
               >
                 {l.label}
               </button>

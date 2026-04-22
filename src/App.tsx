@@ -522,17 +522,21 @@ const Hero: FC<HeroProps> = ({ logoPrimarySrc }) => {
         }}
       />
 
-      {/* Ghost logos */}
-      <img
-        src={logoPrimarySrc}
-        alt=""
-        aria-hidden
-        width={500}
-        height={500}
-        fetchPriority="high"
-        className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none ${startAnim ? "animate-float-bird" : ""}`}
-        style={{ width: "min(500px,75vw)", opacity: 0.06, filter: "grayscale(1)" }}
-      />
+      {/* Ghost logo — LCP element, uses WebP for fastest load */}
+      <picture>
+        <source srcSet={logoPrimarySrc} type="image/webp" />
+        <img
+          src="/assets/logos/logo1.png"
+          alt=""
+          aria-hidden
+          width={500}
+          height={500}
+          fetchPriority="high"
+          decoding="async"
+          className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none ${startAnim ? "animate-float-bird" : ""}`}
+          style={{ width: "min(500px,75vw)", opacity: 0.06, filter: "grayscale(1)" }}
+        />
+      </picture>
       <p
         className="relative z-10 text-[11px] tracking-[0.44em] uppercase font-normal mb-7"
         style={{ color: "#c9a84c", opacity: 0, animation: "fadeUp 1s ease 0.3s forwards" }}
@@ -2309,8 +2313,8 @@ const FloatingWhatsApp: FC = () => {
 
 // ─── App ─────────────────────────────────────────────────────
 export default function App() {
-  const LOGO_PRIMARY_SRC = "/assets/logos/logo1.png";
-  const LOGO_SECONDARY_SRC = "/assets/logos/logo2.png";
+  const LOGO_PRIMARY_SRC = "/assets/logos/logo1.webp";
+  const LOGO_SECONDARY_SRC = "/assets/logos/logo2.webp";
 
   return (
     <>

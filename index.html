@@ -189,7 +189,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
   
   <!-- Preload recursos críticos con fetchpriority -->
-  <link rel="preload" as="image" href="/assets/logos/logo1.png" fetchpriority="high">
+  <!-- WebP es 88% más pequeño que PNG: logo1.webp = 24 KB vs logo1.png = 198 KB -->
+  <link rel="preload" as="image" href="/assets/logos/logo1.webp" type="image/webp" fetchpriority="high">
   
   <!-- Google Fonts con display=swap para evitar bloqueo de renderización -->
   <link rel="preload" as="style" fetchpriority="high"

@@ -225,7 +225,7 @@ function getFocusableElements(container: HTMLElement): HTMLElement[] {
   const selector =
     'a[href],button:not([disabled]),textarea:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])';
   return Array.from(container.querySelectorAll<HTMLElement>(selector)).filter(
-    (el) => el.tabIndex !== -1 && el.offsetParent !== null
+    (el) => el.tabIndex !== -1 && (el as any).checkVisibility?.() !== false
   );
 }
 
@@ -497,8 +497,15 @@ interface HeroProps {
 }
 
 const Hero: FC<HeroProps> = ({ logoPrimarySrc }) => {
+  const [startAnim, setStartAnim] = useState(false);
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+
+  useEffect(() => {
+    // Retrasar la animación para mejorar el LCP (Render Delay)
+    const timer = setTimeout(() => setStartAnim(true), 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <section
@@ -523,8 +530,8 @@ const Hero: FC<HeroProps> = ({ logoPrimarySrc }) => {
         width={500}
         height={500}
         fetchPriority="high"
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-        style={{ width: "min(500px,75vw)", opacity: 0.06, filter: "grayscale(1)", animation: "floatBird 8s ease-in-out infinite" }}
+        className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none ${startAnim ? "animate-float-bird" : ""}`}
+        style={{ width: "min(500px,75vw)", opacity: 0.06, filter: "grayscale(1)" }}
       />
       <p
         className="relative z-10 text-[11px] tracking-[0.44em] uppercase font-normal mb-7"
@@ -1422,7 +1429,7 @@ const BrandCarousel: FC = () => {
 
     const ro = new ResizeObserver(updateWidth);
     ro.observe(inner);
-    updateWidth();
+    const timer = setTimeout(updateWidth, 150);
 
     const scroll = (time: number) => {
       if (!lastTime) lastTime = time;
@@ -1452,6 +1459,7 @@ const BrandCarousel: FC = () => {
     return () => {
       cancelAnimationFrame(animId);
       ro.disconnect();
+      clearTimeout(timer);
     };
   }, []);
 
@@ -1822,7 +1830,7 @@ const Testimonials: FC = () => {
 
     const ro = new ResizeObserver(updateWidth);
     ro.observe(inner);
-    updateWidth();
+    const timer = setTimeout(updateWidth, 200);
 
     const scroll = (time: number) => {
       if (!lastTime) lastTime = time;
@@ -1853,6 +1861,7 @@ const Testimonials: FC = () => {
     return () => {
       cancelAnimationFrame(animId);
       ro.disconnect();
+      clearTimeout(timer);
     };
   }, []);
 
@@ -2308,6 +2317,7 @@ export default function App() {
       {/* Global keyframes injected once */}
       <style>{`
         @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+        .animate-float-bird { animation: floatBird 8s ease-in-out infinite; }
         @keyframes floatBird { 0%,100% { transform:translate(-50%,-50%) rotate(-2deg); } 50% { transform:translate(-50%,-54%) rotate(2deg); } }
         @keyframes rotateSlow { to { transform:rotate(360deg); } }
         @keyframes scrollPulse { 0% { transform:scaleY(0); transform-origin:top; opacity:0; } 50% { transform:scaleY(1); transform-origin:top; opacity:1; } 100% { transform:scaleY(1); transform-origin:bottom; opacity:0; } }
